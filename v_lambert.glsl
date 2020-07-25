@@ -18,12 +18,17 @@ layout (location=1) in vec4 normal; //vertex normal vector in model space
 out vec4 i_color;
 
 void main(void) {
-    gl_Position=P*V*M*vertex;
+    //gl_Position=P*V*M*vertex;
+    //mat4 G=mat4(inverse(transpose(mat3(M))));
+    //vec4 n=normalize(V*G*normal);
 
-    mat4 G=mat4(inverse(transpose(mat3(M))));
-    vec4 n=normalize(V*G*normal);
+    vec4 lp = vec4(0, 1, 0, 1);
+    vec4 l = normalize(V*lp - V*M*vertex);
+    vec4 n = normalize(V*M*normal);
 
     float nl=clamp(dot(n,lightDir),0,1);
 
     i_color=vec4(color.rgb*nl,color.a);
+
+    gl_Position=P*V*M*vertex;
 }

@@ -30,22 +30,29 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "Camera.cpp"
 #include "Camera.h"
 
-
-float speed = PI;//[radians/s]
+float aspectRatio = 1;
 Camera *camera;
-
+//float abc;
 //Error processing callback procedure
 void error_callback(int error, const char* description) {
 	fputs(description, stderr);
 }
 
+void windowResizeCallback(GLFWwindow *window, int width, int height) {
+    if (height == 0) {
+        return;
+    }
+    aspectRatio = (float) width / (float) height;
+    glViewport(0,0,width,height);
+}
 //Initialization code procedure
 void initOpenGLProgram(GLFWwindow* window) {
 	initShaders();
     glClearColor(0, 0, 0, 1); //Set color buffer clear color
 	glEnable(GL_DEPTH_TEST); //Turn on pixel depth test based on depth buffer
+    glfwSetWindowSizeCallback(window, windowResizeCallback);
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-    camera = new Camera(glm::vec3(0.0f, 0.0f,  3.0f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, 1.0f,  0.0f));
+    camera = new Camera(glm::vec3(0.0f, 0.0f,  5.0f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, 1.0f,  0.0f));
 
 }
 //Release resources allocated by the program
@@ -59,9 +66,9 @@ void drawScene(GLFWwindow* window, float angle) {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //Clear color and depth buffers
 	
 	glm::mat4 M = glm::mat4(1.0f); //Initialize model matrix with abn identity matrix
-	M = glm::rotate(M, angle, glm::vec3(0.0f, 1.0f, 0.0f)); //Multiply model matrix by rotation matrix, with rotation by /angle/ radians around Y axis
+	M = glm::scale(M,glm::vec3(2.0f,2.0f,2.0f));
 	glm::mat4 V = camera->getView();
-	glm::mat4 P = glm::perspective(glm::radians(50.0f), 1.0f, 1.0f, 50.0f); //Compute projection matrix
+	glm::mat4 P = glm::perspective(glm::radians(50.0f), aspectRatio, 1.0f, 50.0f); //Compute projection matrix
 
 	spLambert->use(); //Activate shader program
 	glUniform4f(spLambert->u("color"), 0, 1, 0, 1); //Copy object color to shader program internal variable
@@ -69,7 +76,7 @@ void drawScene(GLFWwindow* window, float angle) {
 	glUniformMatrix4fv(spLambert->u("V"), 1, false, glm::value_ptr(V)); //Copy view matrix to shader program internal variable
 	glUniformMatrix4fv(spLambert->u("M"), 1, false, glm::value_ptr(M)); //Copy model matrix to shader program internal variable
 
-	Models::torus.drawSolid(); //Draw object
+	Models::cube.drawSolid(); //Draw object
 
 	glfwSwapBuffers(window); //Copy back buffer to the front buffer
 }
