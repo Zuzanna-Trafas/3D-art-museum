@@ -30,6 +30,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "Camera.cpp"
 #include "Camera.h"
 
+
+
 float aspectRatio = 1;
 Camera *camera;
 //float abc;
@@ -66,7 +68,7 @@ void drawScene(GLFWwindow* window, float angle) {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //Clear color and depth buffers
 	
 	glm::mat4 M = glm::mat4(1.0f); //Initialize model matrix with abn identity matrix
-	M = glm::scale(M,glm::vec3(2.0f,2.0f,2.0f));
+	M = glm::scale(M,glm::vec3(10.0f,5.0f,10.0f));
 	glm::mat4 V = camera->getView();
 	glm::mat4 P = glm::perspective(glm::radians(50.0f), aspectRatio, 1.0f, 50.0f); //Compute projection matrix
 
@@ -76,7 +78,7 @@ void drawScene(GLFWwindow* window, float angle) {
 	glUniformMatrix4fv(spLambert->u("V"), 1, false, glm::value_ptr(V)); //Copy view matrix to shader program internal variable
 	glUniformMatrix4fv(spLambert->u("M"), 1, false, glm::value_ptr(M)); //Copy model matrix to shader program internal variable
 
-	Models::cube.drawSolid(); //Draw object
+	Models::walls.drawSolid(); //Draw object
 
 	glfwSwapBuffers(window); //Copy back buffer to the front buffer
 }
