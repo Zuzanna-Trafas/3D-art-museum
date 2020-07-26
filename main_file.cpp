@@ -52,7 +52,8 @@ void initOpenGLProgram(GLFWwindow* window) {
 	initShaders();
     glClearColor(0, 0, 0, 1); //Set color buffer clear color
 	glEnable(GL_DEPTH_TEST); //Turn on pixel depth test based on depth buffer
-    glfwSetWindowSizeCallback(window, windowResizeCallback);
+    glfwSetCursorPos(window, 960, 0);
+	glfwSetWindowSizeCallback(window, windowResizeCallback);
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     camera = new Camera(glm::vec3(0.0f, 0.0f,  5.0f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, 1.0f,  0.0f));
 
@@ -68,17 +69,40 @@ void drawScene(GLFWwindow* window, float angle) {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //Clear color and depth buffers
 	
 	glm::mat4 M = glm::mat4(1.0f); //Initialize model matrix with abn identity matrix
-	M = glm::scale(M,glm::vec3(10.0f,5.0f,10.0f));
+	M = glm::scale(M,glm::vec3(30.0f,7.0f,30.0f));
+    M = glm::translate(M,glm::vec3(0.0f,0.2f,0.0f));
 	glm::mat4 V = camera->getView();
 	glm::mat4 P = glm::perspective(glm::radians(50.0f), aspectRatio, 1.0f, 50.0f); //Compute projection matrix
 
 	spLambert->use(); //Activate shader program
-	glUniform4f(spLambert->u("color"), 0, 1, 0, 1); //Copy object color to shader program internal variable
+	glUniform4f(spLambert->u("color"), 1, 1, 1, 1); //Copy object color to shader program internal variable
 	glUniformMatrix4fv(spLambert->u("P"), 1, false, glm::value_ptr(P)); //Copy projection matrix to shader program internal variable
 	glUniformMatrix4fv(spLambert->u("V"), 1, false, glm::value_ptr(V)); //Copy view matrix to shader program internal variable
 	glUniformMatrix4fv(spLambert->u("M"), 1, false, glm::value_ptr(M)); //Copy model matrix to shader program internal variable
 
 	Models::walls.drawSolid(); //Draw object
+
+	glm::mat4 M2 = glm::translate(M,glm::vec3(0.0f,0.0f,-3.0f));
+	M2 = glm::rotate(M2, -90.0f * PI / 180.0f, glm::vec3(0.0f,1.0f,0.0f));
+
+    glUniformMatrix4fv(spLambert->u("M"), 1, false, glm::value_ptr(M2));
+
+    Models::walls.drawSolid();
+
+    glm::mat4 M3 = glm::translate(M2,glm::vec3(0.0f,0.0f,-3.0f));
+    M3 = glm::rotate(M3, -90.0f * PI / 180.0f, glm::vec3(0.0f,1.0f,0.0f));
+
+    glUniformMatrix4fv(spLambert->u("M"), 1, false, glm::value_ptr(M3));
+
+    Models::walls.drawSolid();
+
+    glm::mat4 M4 = glm::translate(M3,glm::vec3(0.0f,0.0f,-3.0f));
+    M4 = glm::rotate(M4, -90.0f * PI / 180.0f, glm::vec3(0.0f,1.0f,0.0f));
+
+    glUniformMatrix4fv(spLambert->u("M"), 1, false, glm::value_ptr(M4));
+
+    Models::walls.drawSolid();
+
 
 	glfwSwapBuffers(window); //Copy back buffer to the front buffer
 }
