@@ -17,9 +17,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define ALL_MODELS_H
 
 #include "cube.h"
-#include "sphere.h"
-#include "teapot.h"
-#include "torus.h"
 #include "walls.h"
 
 #endif
