@@ -55,8 +55,9 @@ void initOpenGLProgram(GLFWwindow* window) {
     glfwSetCursorPos(window, 960, 0);
 	glfwSetWindowSizeCallback(window, windowResizeCallback);
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-    camera = new Camera(glm::vec3(0.0f, 0.0f,  5.0f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, 1.0f,  0.0f));
-
+    // initialize the camera in the center of a room
+    camera = new Camera(glm::vec3(45.0f, 0.0f,  45.0f),
+                        glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, 1.0f,  0.0f));
 }
 //Release resources allocated by the program
 void freeOpenGLProgram(GLFWwindow* window) {
@@ -69,8 +70,11 @@ void drawScene(GLFWwindow* window, float angle) {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //Clear color and depth buffers
 	
 	glm::mat4 M = glm::mat4(1.0f); //Initialize model matrix with abn identity matrix
-	M = glm::scale(M,glm::vec3(30.0f,7.0f,30.0f));
-    M = glm::translate(M,glm::vec3(0.0f,0.2f,0.0f));
+	M = glm::scale(M,glm::vec3(30.0f,7.0f,30.0f)); // scale the walls size
+
+	// translate the floor up, so the camera is closer to the floor
+	// and translate the first room so that the (0,0) point would be in the center of the museum
+    M = glm::translate(M,glm::vec3(-1.5f,0.2f,1.5f));
 	glm::mat4 V = camera->getView();
 	glm::mat4 P = glm::perspective(glm::radians(50.0f), aspectRatio, 1.0f, 50.0f); //Compute projection matrix
 

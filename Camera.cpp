@@ -9,19 +9,35 @@ Camera::Camera(glm::vec3 Pos, glm::vec3 Front, glm::vec3 Up) {
     pitch = 0;
 }
 
+void Camera::move(glm::vec3 newPos) {
+    // check if not going beyond walls
+    if (newPos.x > 72 || newPos.x < -72) return;
+    if (newPos.z > 72 || newPos.z < -72) return;
+    if (newPos.x < 17 && newPos.x > -17) {
+        if (newPos.z > 47.5 || (newPos.z < 42.5 && newPos.z > 42.5)) return;
+        if (newPos.z < -47.5 || (newPos.z > -42.5 && newPos.z < 42.5)) return;
+    }
+    if (newPos.z < 17 && newPos.z > -17) {
+        if (newPos.x > 47.5 || (newPos.x < 42.5 && newPos.x > -42.5)) return;
+        if (newPos.x < -47.5 || (newPos.x > -42.5 && newPos.x < 42.5)) return;
+    }
+    // if not, move
+    cameraPos = newPos;
+}
+
 void Camera::processInput(GLFWwindow *window) {
     if (glfwGetWindowAttrib(window, GLFW_FOCUSED)) {
         if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
             glfwSetWindowShouldClose(window, true);
         const float cameraSpeed = CAMERA_SPEED * glfwGetTime();
         if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
-            cameraPos += cameraSpeed * cameraFront;
+            move(cameraPos + cameraSpeed * cameraFront);
         if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
-            cameraPos -= cameraSpeed * cameraFront;
+            move(cameraPos - cameraSpeed * cameraFront);
         if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
-            cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
+            move(cameraPos - glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed);
         if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
-            cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
+            move(cameraPos + glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed);
         cameraPos.y = 0.0f;
     }
 }
@@ -49,6 +65,7 @@ void Camera::mouseCallback(GLFWwindow* window) {
 }
 
 glm::mat4 Camera::getView() {
+    //printf("x: %f y: %f z: %f\n", cameraPos.x, cameraPos.y, cameraPos.z);
     glm::mat4 view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
     return view;
 }
