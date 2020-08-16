@@ -59,22 +59,56 @@ void initOpenGLProgram(GLFWwindow* window) {
     camera = new Camera(glm::vec3(45.0f, 0.0f,  45.0f),
                         glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, 1.0f,  0.0f));
 }
+
 //Release resources allocated by the program
 void freeOpenGLProgram(GLFWwindow* window) {
     freeShaders();
 }
 
+void drawPainting(glm::mat4 M) {
+    glm::mat4 M1 = glm::scale(M,glm::vec3(1.0f,1.0f,0.008f));
+    glUniformMatrix4fv(spLambert->u("M"), 1, false, glm::value_ptr(M1));
+    Models::cube.drawSolid();
+
+    glm::mat4 M2 = glm::translate(M1, glm::vec3(0.0f, 0.0f, -1.2f));
+    M2 = glm::scale(M2,glm::vec3(0.9f,0.9f,0.2f));
+    glUniformMatrix4fv(spLambert->u("M"), 1, false, glm::value_ptr(M2));
+    Models::cube.drawSolid();
+}
+
+void drawWalls() {
+    glm::mat4 M = glm::mat4(1.0f); //Initialize model matrix with abn identity matrix
+    M = glm::scale(M,glm::vec3(30.0f,7.0f,30.0f)); // scale the walls size
+
+    // translate the floor up, so the camera is closer to the floor
+    // and translate the first room so that the (0,0) point would be in the center of the museum
+    M = glm::translate(M,glm::vec3(-1.5f,0.2f,1.5f));
+
+    glUniformMatrix4fv(spLambert->u("M"), 1, false, glm::value_ptr(M));
+    Models::walls.drawSolid(); //Draw object
+
+    glm::mat4 M2 = glm::translate(M,glm::vec3(0.0f,0.0f,-3.0f));
+    M2 = glm::rotate(M2, -90.0f * PI / 180.0f, glm::vec3(0.0f,1.0f,0.0f));
+    glUniformMatrix4fv(spLambert->u("M"), 1, false, glm::value_ptr(M2));
+    Models::walls.drawSolid();
+
+    glm::mat4 M3 = glm::translate(M2,glm::vec3(0.0f,0.0f,-3.0f));
+    M3 = glm::rotate(M3, -90.0f * PI / 180.0f, glm::vec3(0.0f,1.0f,0.0f));
+    glUniformMatrix4fv(spLambert->u("M"), 1, false, glm::value_ptr(M3));
+    Models::walls.drawSolid();
+
+    glm::mat4 M4 = glm::translate(M3,glm::vec3(0.0f,0.0f,-3.0f));
+    M4 = glm::rotate(M4, -90.0f * PI / 180.0f, glm::vec3(0.0f,1.0f,0.0f));
+    glUniformMatrix4fv(spLambert->u("M"), 1, false, glm::value_ptr(M4));
+    Models::walls.drawSolid();
+
+}
+
 //Drawing procedure
-void drawScene(GLFWwindow* window, float angle) {
+void drawScene(GLFWwindow* window) {
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //Clear color and depth buffers
-	
-	glm::mat4 M = glm::mat4(1.0f); //Initialize model matrix with abn identity matrix
-	M = glm::scale(M,glm::vec3(30.0f,7.0f,30.0f)); // scale the walls size
 
-	// translate the floor up, so the camera is closer to the floor
-	// and translate the first room so that the (0,0) point would be in the center of the museum
-    M = glm::translate(M,glm::vec3(-1.5f,0.2f,1.5f));
 	glm::mat4 V = camera->getView();
 	glm::mat4 P = glm::perspective(glm::radians(50.0f), aspectRatio, 1.0f, 50.0f); //Compute projection matrix
 
@@ -82,33 +116,27 @@ void drawScene(GLFWwindow* window, float angle) {
 	glUniform4f(spLambert->u("color"), 1, 1, 1, 1); //Copy object color to shader program internal variable
 	glUniformMatrix4fv(spLambert->u("P"), 1, false, glm::value_ptr(P)); //Copy projection matrix to shader program internal variable
 	glUniformMatrix4fv(spLambert->u("V"), 1, false, glm::value_ptr(V)); //Copy view matrix to shader program internal variable
-	glUniformMatrix4fv(spLambert->u("M"), 1, false, glm::value_ptr(M)); //Copy model matrix to shader program internal variable
 
-	Models::walls.drawSolid(); //Draw object
+	drawWalls();
 
-	glm::mat4 M2 = glm::translate(M,glm::vec3(0.0f,0.0f,-3.0f));
-	M2 = glm::rotate(M2, -90.0f * PI / 180.0f, glm::vec3(0.0f,1.0f,0.0f));
+    // PAINTINGS
+    /*
+     * Room corner coordinates:
+     * (15,15)  (15,75)  (75,15)  (75,75)
+     */
 
-    glUniformMatrix4fv(spLambert->u("M"), 1, false, glm::value_ptr(M2));
+    glUniform4f(spLambert->u("color"), 0, 0, 1, 1); //Copy object color to shader program internal variable
 
-    Models::walls.drawSolid();
-
-    glm::mat4 M3 = glm::translate(M2,glm::vec3(0.0f,0.0f,-3.0f));
-    M3 = glm::rotate(M3, -90.0f * PI / 180.0f, glm::vec3(0.0f,1.0f,0.0f));
-
-    glUniformMatrix4fv(spLambert->u("M"), 1, false, glm::value_ptr(M3));
-
-    Models::walls.drawSolid();
-
-    glm::mat4 M4 = glm::translate(M3,glm::vec3(0.0f,0.0f,-3.0f));
-    M4 = glm::rotate(M4, -90.0f * PI / 180.0f, glm::vec3(0.0f,1.0f,0.0f));
-
-    glUniformMatrix4fv(spLambert->u("M"), 1, false, glm::value_ptr(M4));
-
-    Models::walls.drawSolid();
+    glm::mat4 Mp = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 1.4f, 0.0f));
+    glm::mat4 Mp1 = glm::translate(Mp, glm::vec3(34.0f, 0.0f, 75.0f));
+    Mp1 = glm::scale(Mp1, glm::vec3(6.0f, 4.0f, 1.0f));
+    drawPainting(Mp1);
+    glm::mat4 Mp2 = glm::translate(Mp, glm::vec3(58.0f, 0.0f, 75.0f));
+    Mp2 = glm::scale(Mp2, glm::vec3(8.0f, 4.0f, 1.0f));
+    drawPainting(Mp2);
 
 
-	glfwSwapBuffers(window); //Copy back buffer to the front buffer
+    glfwSwapBuffers(window); //Copy back buffer to the front buffer
 }
 
 int main(void)
@@ -142,14 +170,14 @@ int main(void)
 	initOpenGLProgram(window); //Call initialization procedure
 
 	//Main application loop
-    float angle = 0; //declare variable for storing current rotation angle
+
 	glfwSetTime(0); //clear internal timer
 	while (!glfwWindowShouldClose(window)) //As long as the window shouldnt be closed yet...
 	{		
         camera->processInput(window);
         camera->mouseCallback(window);
 		glfwSetTime(0); //clear internal timer
-		drawScene(window,angle); //Execute drawing procedure
+		drawScene(window); //Execute drawing procedure
 		glfwPollEvents(); //Process callback procedures corresponding to the events that took place up to now
 	}
 	freeOpenGLProgram(window);
