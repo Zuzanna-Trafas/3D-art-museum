@@ -14,6 +14,7 @@ private:
     float pitch;
 public:
     Camera(glm::vec3 Pos, glm::vec3 Front, glm::vec3 Up);
+    void move(glm::vec3 newPos);
     void processInput(GLFWwindow *window);
     void mouseCallback(GLFWwindow* window);
     glm::mat4 getView();
