@@ -16,6 +16,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #define GLM_FORCE_RADIANS
 
+#include <iostream>
+#include <sstream>
+#include <string.h>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
@@ -31,13 +34,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "Camera.h"
 
 
-
 float aspectRatio = 1;
 Camera *camera;
-GLuint tex; //texture handle
+
 GLuint walls;
 GLuint floors;
 GLuint ceilings;
+GLuint frame;
+GLuint paintings[40];
 
 //Error processing callback procedure
 void error_callback(int error, const char* description) {
@@ -81,6 +85,18 @@ void initOpenGLProgram(GLFWwindow* window) {
     walls=readTexture("res/textures/walls.png");
     floors=readTexture("res/textures/floor.png");
     ceilings=readTexture("res/textures/ceiling.png");
+    frame=readTexture("res/textures/frame.png");
+    // read all painting textures
+    char path[50];
+    for (int i=0; i<7 ; i++) {
+        std::string s = std::to_string(i+1);
+        char const *pchar = s.c_str();
+        strcpy(path,"res/textures/painting");
+        strcat(path, pchar);
+        strcat(path, ".png");
+        printf("%s\n", path);
+        paintings[i] = readTexture(path);
+    }
     // initialize the camera in the center of a room
     camera = new Camera(glm::vec3(45.0f, 0.0f,  45.0f),
                         glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, 1.0f,  0.0f));
@@ -91,18 +107,20 @@ void freeOpenGLProgram(GLFWwindow* window) {
     glDeleteTextures(1,&walls);
     glDeleteTextures(1,&floors);
     glDeleteTextures(1,&ceilings);
+    glDeleteTextures(1,&frame);
+    glDeleteTextures(7, paintings);
     freeShaders();
 }
 
-void drawPainting(glm::mat4 M) {
-    glm::mat4 M1 = glm::scale(M,glm::vec3(1.0f,1.0f,0.008f));
+void drawPainting(glm::mat4 M, GLuint tex) {
+    glm::mat4 M1 = glm::scale(M,glm::vec3(1.0f,1.0f,0.15f));
     glUniformMatrix4fv(spTextured->u("M"), 1, false, glm::value_ptr(M1));
-    Models::cube.drawCube(floors);
+    Models::cube.drawCube(frame);
 
-    glm::mat4 M2 = glm::translate(M1, glm::vec3(0.0f, 0.0f, -1.2f));
+    glm::mat4 M2 = glm::translate(M1, glm::vec3(0.0f, 0.0f, -1.4f));
     M2 = glm::scale(M2,glm::vec3(0.9f,0.9f,0.2f));
     glUniformMatrix4fv(spTextured->u("M"), 1, false, glm::value_ptr(M2));
-    Models::cube.drawCube(walls);
+    Models::cube.drawCube(tex);
 }
 
 void drawWalls() {
@@ -133,6 +151,46 @@ void drawWalls() {
     Models::walls.drawWalls(walls, floors, ceilings);
 }
 
+void decorateWalls() {
+    /*
+     * Room corner coordinates:
+     * (15,15)  (15,75)  (75,15)  (75,75)
+     */
+
+    //glUniform4f(spTextured->u("color"), 0, 0, 1, 1); //Copy object color to shader program internal variable
+
+    glm::mat4 M = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 1.8f, 0.0f)); // move up so the painting will be at the center
+
+    glm::mat4 M1 = glm::translate(M, glm::vec3(34.0f, 0.0f, 75.0f));
+    M1 = glm::scale(M1, glm::vec3(6.0f, 4.0f, 1.0f));
+    drawPainting(M1, paintings[0]);
+
+    glm::mat4 M2 = glm::translate(M, glm::vec3(58.0f, 0.0f, 75.0f));
+    M2 = glm::scale(M2, glm::vec3(4.0f, 6.0f, 1.0f));
+    drawPainting(M2, paintings[1]);
+
+    glm::mat4 M3 = glm::translate(M, glm::vec3(75.0f, 0.0f, 34.0f));
+    M3 = glm::scale(M3, glm::vec3(1.0f, 6.0f, 4.0f));
+    M3 = glm::rotate(M3, 90.0f*PI/180.0f,glm::vec3(0.0f, 1.0f, 0.0f));
+    drawPainting(M3, paintings[2]);
+
+    glm::mat4 M4 = glm::translate(M, glm::vec3(75.0f, 0.0f, 58.0f));
+    M4 = glm::scale(M4, glm::vec3(1.0f, 6.0f, 5.0f));
+    M4 = glm::rotate(M4, 90.0f*PI/180.0f,glm::vec3(0.0f, 1.0f, 0.0f));
+    drawPainting(M4, paintings[3]);
+
+    glm::mat4 M5 = glm::translate(M, glm::vec3(15.0f, 0.0f, 30.0f));
+    M5 = glm::scale(M5, glm::vec3(1.0f, 4.0f, 4.0f));
+    M5 = glm::rotate(M5, -90.0f*PI/180.0f,glm::vec3(0.0f, 1.0f, 0.0f));
+    drawPainting(M5, paintings[4]);
+
+    glm::mat4 M6 = glm::translate(M, glm::vec3(15.0f, 0.0f, 60.0f));
+    M6 = glm::scale(M6, glm::vec3(1.0f, 6.0f, 6.0f));
+    M6 = glm::rotate(M6, -90.0f*PI/180.0f,glm::vec3(0.0f, 1.0f, 0.0f));
+    drawPainting(M6, paintings[5]);
+
+}
+
 //Drawing procedure
 void drawScene(GLFWwindow* window) {
 
@@ -147,26 +205,8 @@ void drawScene(GLFWwindow* window) {
 	glUniformMatrix4fv(spTextured->u("V"), 1, false, glm::value_ptr(V)); //Copy view matrix to shader program internal variable
 
 	drawWalls();
+	decorateWalls();
 
-
-    // PAINTINGS
-    /*
-     * Room corner coordinates:
-     * (15,15)  (15,75)  (75,15)  (75,75)
-     */
-
-    //glUniform4f(spTextured->u("color"), 0, 0, 1, 1); //Copy object color to shader program internal variable
-
-    glm::mat4 Mp = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 1.4f, 0.0f));
-    glm::mat4 Mp1 = glm::translate(Mp, glm::vec3(34.0f, 0.0f, 75.0f));
-    Mp1 = glm::scale(Mp1, glm::vec3(6.0f, 4.0f, 1.0f));
-    drawPainting(Mp1);
-    glm::mat4 Mp2 = glm::translate(Mp, glm::vec3(58.0f, 0.0f, 75.0f));
-    Mp2 = glm::scale(Mp2, glm::vec3(8.0f, 4.0f, 1.0f));
-    drawPainting(Mp2);
-
-
-    glDisableVertexAttribArray(spTextured->a("texCoord"));
     glfwSwapBuffers(window); //Copy back buffer to the front buffer
 }
 
