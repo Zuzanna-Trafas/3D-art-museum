@@ -35,6 +35,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 float aspectRatio = 1;
 Camera *camera;
 GLuint tex; //texture handle
+GLuint walls;
+GLuint floors;
+GLuint ceilings;
 
 //Error processing callback procedure
 void error_callback(int error, const char* description) {
@@ -75,7 +78,9 @@ void initOpenGLProgram(GLFWwindow* window) {
     glfwSetCursorPos(window, 960, 0);
 	glfwSetWindowSizeCallback(window, windowResizeCallback);
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-    tex=readTexture("bricks.png");
+    walls=readTexture("textures/walls.png");
+    floors=readTexture("textures/floor.png");
+    ceilings=readTexture("textures/ceiling.png");
     // initialize the camera in the center of a room
     camera = new Camera(glm::vec3(45.0f, 0.0f,  45.0f),
                         glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, 1.0f,  0.0f));
@@ -83,47 +88,49 @@ void initOpenGLProgram(GLFWwindow* window) {
 
 //Release resources allocated by the program
 void freeOpenGLProgram(GLFWwindow* window) {
-    glDeleteTextures(1,&tex);
+    glDeleteTextures(1,&walls);
+    glDeleteTextures(1,&floors);
+    glDeleteTextures(1,&ceilings);
     freeShaders();
 }
 
 void drawPainting(glm::mat4 M) {
     glm::mat4 M1 = glm::scale(M,glm::vec3(1.0f,1.0f,0.008f));
     glUniformMatrix4fv(spTextured->u("M"), 1, false, glm::value_ptr(M1));
-    Models::cube.drawCube(tex);
+    Models::cube.drawCube(floors);
 
     glm::mat4 M2 = glm::translate(M1, glm::vec3(0.0f, 0.0f, -1.2f));
     M2 = glm::scale(M2,glm::vec3(0.9f,0.9f,0.2f));
     glUniformMatrix4fv(spTextured->u("M"), 1, false, glm::value_ptr(M2));
-    Models::cube.drawCube(tex);
+    Models::cube.drawCube(walls);
 }
 
 void drawWalls() {
 
     glm::mat4 M = glm::mat4(1.0f); //Initialize model matrix with abn identity matrix
-    M = glm::scale(M,glm::vec3(30.0f,7.0f,30.0f)); // scale the walls size
+    M = glm::scale(M,glm::vec3(30.0f,9.0f,30.0f)); // scale the walls size
 
     // translate the floor up, so the camera is closer to the floor
     // and translate the first room so that the (0,0) point would be in the center of the museum
     M = glm::translate(M,glm::vec3(-1.5f,0.2f,1.5f));
 
     glUniformMatrix4fv(spTextured->u("M"), 1, false, glm::value_ptr(M));
-    Models::walls.drawWalls(tex); //Draw object
+    Models::walls.drawWalls(walls, floors, ceilings); //Draw object
 
     glm::mat4 M2 = glm::translate(M,glm::vec3(0.0f,0.0f,-3.0f));
     M2 = glm::rotate(M2, -90.0f * PI / 180.0f, glm::vec3(0.0f,1.0f,0.0f));
     glUniformMatrix4fv(spTextured->u("M"), 1, false, glm::value_ptr(M2));
-    Models::walls.drawWalls(tex);
+    Models::walls.drawWalls(walls, floors, ceilings);
 
     glm::mat4 M3 = glm::translate(M2,glm::vec3(0.0f,0.0f,-3.0f));
     M3 = glm::rotate(M3, -90.0f * PI / 180.0f, glm::vec3(0.0f,1.0f,0.0f));
     glUniformMatrix4fv(spTextured->u("M"), 1, false, glm::value_ptr(M3));
-    Models::walls.drawWalls(tex);
+    Models::walls.drawWalls(walls, floors, ceilings);
 
     glm::mat4 M4 = glm::translate(M3,glm::vec3(0.0f,0.0f,-3.0f));
     M4 = glm::rotate(M4, -90.0f * PI / 180.0f, glm::vec3(0.0f,1.0f,0.0f));
     glUniformMatrix4fv(spTextured->u("M"), 1, false, glm::value_ptr(M4));
-    Models::walls.drawWalls(tex);
+    Models::walls.drawWalls(walls, floors, ceilings);
 }
 
 //Drawing procedure

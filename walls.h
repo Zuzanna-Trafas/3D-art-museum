@@ -22,7 +22,7 @@ namespace Models {
         Walls();
         virtual ~Walls();
         virtual void drawSolid(bool smooth=false);
-        void drawWalls(GLuint tex);
+        void drawWalls(GLuint walls,GLuint floors,GLuint ceilings);
     };
 
     extern Walls walls;
