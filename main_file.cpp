@@ -44,15 +44,15 @@ void error_callback(int error, const char* description) {
 GLuint readTexture(char* filename) {
     GLuint tex;
     glActiveTexture(GL_TEXTURE0);
-//Read into computers memory
+    //Read into computers memory
     std::vector<unsigned char> image; //Allocate memory
     unsigned width, height; //Variables for image size
-//Read the image
+    //Read the image
     unsigned error = lodepng::decode(image, width, height, filename);
-//Import to graphics card memory
+    //Import to graphics card memory
     glGenTextures(1,&tex); //Initialize one handle
     glBindTexture(GL_TEXTURE_2D, tex); //Activate handle
-//Copy image to graphics cards memory reprezented by the active handle
+    //Copy image to graphics cards memory represented by the active handle
     glTexImage2D(GL_TEXTURE_2D, 0, 4, width, height, 0,
                  GL_RGBA, GL_UNSIGNED_BYTE, (unsigned char*) image.data());
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -75,7 +75,7 @@ void initOpenGLProgram(GLFWwindow* window) {
     glfwSetCursorPos(window, 960, 0);
 	glfwSetWindowSizeCallback(window, windowResizeCallback);
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-    tex=readTexture("textures/wood-texture.png");
+    tex=readTexture("bricks.png");
     // initialize the camera in the center of a room
     camera = new Camera(glm::vec3(45.0f, 0.0f,  45.0f),
                         glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, 1.0f,  0.0f));
@@ -89,16 +89,17 @@ void freeOpenGLProgram(GLFWwindow* window) {
 
 void drawPainting(glm::mat4 M) {
     glm::mat4 M1 = glm::scale(M,glm::vec3(1.0f,1.0f,0.008f));
-    glUniformMatrix4fv(spLambert->u("M"), 1, false, glm::value_ptr(M1));
-    Models::cube.drawSolid();
+    glUniformMatrix4fv(spTextured->u("M"), 1, false, glm::value_ptr(M1));
+    Models::cube.drawCube(tex);
 
     glm::mat4 M2 = glm::translate(M1, glm::vec3(0.0f, 0.0f, -1.2f));
     M2 = glm::scale(M2,glm::vec3(0.9f,0.9f,0.2f));
-    glUniformMatrix4fv(spLambert->u("M"), 1, false, glm::value_ptr(M2));
-    Models::cube.drawSolid();
+    glUniformMatrix4fv(spTextured->u("M"), 1, false, glm::value_ptr(M2));
+    Models::cube.drawCube(tex);
 }
 
 void drawWalls() {
+
     glm::mat4 M = glm::mat4(1.0f); //Initialize model matrix with abn identity matrix
     M = glm::scale(M,glm::vec3(30.0f,7.0f,30.0f)); // scale the walls size
 
@@ -107,23 +108,22 @@ void drawWalls() {
     M = glm::translate(M,glm::vec3(-1.5f,0.2f,1.5f));
 
     glUniformMatrix4fv(spTextured->u("M"), 1, false, glm::value_ptr(M));
-    Models::walls.drawSolid(); //Draw object
+    Models::walls.drawWalls(tex); //Draw object
 
     glm::mat4 M2 = glm::translate(M,glm::vec3(0.0f,0.0f,-3.0f));
     M2 = glm::rotate(M2, -90.0f * PI / 180.0f, glm::vec3(0.0f,1.0f,0.0f));
     glUniformMatrix4fv(spTextured->u("M"), 1, false, glm::value_ptr(M2));
-    Models::walls.drawSolid();
+    Models::walls.drawWalls(tex);
 
     glm::mat4 M3 = glm::translate(M2,glm::vec3(0.0f,0.0f,-3.0f));
     M3 = glm::rotate(M3, -90.0f * PI / 180.0f, glm::vec3(0.0f,1.0f,0.0f));
     glUniformMatrix4fv(spTextured->u("M"), 1, false, glm::value_ptr(M3));
-    Models::walls.drawSolid();
+    Models::walls.drawWalls(tex);
 
     glm::mat4 M4 = glm::translate(M3,glm::vec3(0.0f,0.0f,-3.0f));
     M4 = glm::rotate(M4, -90.0f * PI / 180.0f, glm::vec3(0.0f,1.0f,0.0f));
     glUniformMatrix4fv(spTextured->u("M"), 1, false, glm::value_ptr(M4));
-    Models::walls.drawSolid();
-
+    Models::walls.drawWalls(tex);
 }
 
 //Drawing procedure
@@ -135,17 +135,12 @@ void drawScene(GLFWwindow* window) {
 	glm::mat4 P = glm::perspective(glm::radians(50.0f), aspectRatio, 1.0f, 50.0f); //Compute projection matrix
 
     spTextured->use(); //Activate shader program
-	glUniform4f(spTextured->u("color"), 1, 1, 1, 1); //Copy object color to shader program internal variable
+	// glUniform4f(spTextured->u("color"), 1, 1, 1, 1); //Copy object color to shader program internal variable
 	glUniformMatrix4fv(spTextured->u("P"), 1, false, glm::value_ptr(P)); //Copy projection matrix to shader program internal variable
 	glUniformMatrix4fv(spTextured->u("V"), 1, false, glm::value_ptr(V)); //Copy view matrix to shader program internal variable
 
-    glEnableVertexAttribArray(spTextured->a("texCoord"));
-    glVertexAttribPointer(spTextured->a("texCoord"),2,GL_FLOAT,false,0, Models::walls.texCoords);
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D,tex);
-    glUniform1i(spTextured->u("tex"),0);
-
 	drawWalls();
+
 
     // PAINTINGS
     /*
@@ -153,7 +148,7 @@ void drawScene(GLFWwindow* window) {
      * (15,15)  (15,75)  (75,15)  (75,75)
      */
 
-    glUniform4f(spTextured->u("color"), 0, 0, 1, 1); //Copy object color to shader program internal variable
+    //glUniform4f(spTextured->u("color"), 0, 0, 1, 1); //Copy object color to shader program internal variable
 
     glm::mat4 Mp = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 1.4f, 0.0f));
     glm::mat4 Mp1 = glm::translate(Mp, glm::vec3(34.0f, 0.0f, 75.0f));

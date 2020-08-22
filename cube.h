@@ -42,6 +42,7 @@ namespace Models {
 			Cube();
 			virtual ~Cube();
 			virtual void drawSolid(bool smooth=false);
+			void drawCube(GLuint tex);
 	};
 
 	extern Cube cube;
