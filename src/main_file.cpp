@@ -48,9 +48,9 @@ void error_callback(int error, const char* description) {
 	fputs(description, stderr);
 }
 
-GLuint readTexture(char* filename) {
+GLuint readTexture(char* filename, int i = 0) {
     GLuint tex;
-    glActiveTexture(GL_TEXTURE0);
+    glActiveTexture(GL_TEXTURE0 + i);
     //Read into computers memory
     std::vector<unsigned char> image; //Allocate memory
     unsigned width, height; //Variables for image size
@@ -88,14 +88,14 @@ void initOpenGLProgram(GLFWwindow* window) {
     frame=readTexture("res/textures/frame.png");
     // read all painting textures
     char path[50];
-    for (int i=0; i<7 ; i++) {
+    for (int i=0; i<38 ; i++) {
         std::string s = std::to_string(i+1);
         char const *pchar = s.c_str();
         strcpy(path,"res/textures/painting");
         strcat(path, pchar);
         strcat(path, ".png");
         printf("%s\n", path);
-        paintings[i] = readTexture(path);
+        paintings[i] = readTexture(path, i+1);
     }
     // initialize the camera in the center of a room
     camera = new Camera(glm::vec3(45.0f, 0.0f,  45.0f),
@@ -161,34 +161,167 @@ void decorateWalls() {
 
     glm::mat4 M = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 1.8f, 0.0f)); // move up so the painting will be at the center
 
-    glm::mat4 M1 = glm::translate(M, glm::vec3(34.0f, 0.0f, 75.0f));
-    M1 = glm::scale(M1, glm::vec3(6.0f, 4.0f, 1.0f));
-    drawPainting(M1, paintings[0]);
 
-    glm::mat4 M2 = glm::translate(M, glm::vec3(58.0f, 0.0f, 75.0f));
-    M2 = glm::scale(M2, glm::vec3(4.0f, 6.0f, 1.0f));
-    drawPainting(M2, paintings[1]);
+    // ROOM 1
 
-    glm::mat4 M3 = glm::translate(M, glm::vec3(75.0f, 0.0f, 34.0f));
-    M3 = glm::scale(M3, glm::vec3(1.0f, 6.0f, 4.0f));
-    M3 = glm::rotate(M3, 90.0f*PI/180.0f,glm::vec3(0.0f, 1.0f, 0.0f));
-    drawPainting(M3, paintings[2]);
+    glm::mat4 Mp = glm::translate(M, glm::vec3(34.0f, 0.0f, 75.0f));
+    Mp = glm::scale(Mp, glm::vec3(6.0f, 6.0f, 1.0f));
+    drawPainting(Mp, paintings[0]);
 
-    glm::mat4 M4 = glm::translate(M, glm::vec3(75.0f, 0.0f, 58.0f));
-    M4 = glm::scale(M4, glm::vec3(1.0f, 6.0f, 5.0f));
-    M4 = glm::rotate(M4, 90.0f*PI/180.0f,glm::vec3(0.0f, 1.0f, 0.0f));
-    drawPainting(M4, paintings[3]);
+    Mp = glm::translate(M, glm::vec3(58.0f, 0.0f, 75.0f));
+    Mp = glm::scale(Mp, glm::vec3(6.0f, 6.0f, 1.0f));
+    drawPainting(Mp, paintings[1]);
 
-    glm::mat4 M5 = glm::translate(M, glm::vec3(15.0f, 0.0f, 30.0f));
-    M5 = glm::scale(M5, glm::vec3(1.0f, 4.0f, 4.0f));
-    M5 = glm::rotate(M5, -90.0f*PI/180.0f,glm::vec3(0.0f, 1.0f, 0.0f));
-    drawPainting(M5, paintings[4]);
+    Mp = glm::translate(M, glm::vec3(75.0f, 0.0f, 34.0f));
+    Mp = glm::scale(Mp, glm::vec3(1.0f, 6.0f, 6.0f));
+    Mp = glm::rotate(Mp, 90.0f*PI/180.0f,glm::vec3(0.0f, 1.0f, 0.0f));
+    drawPainting(Mp, paintings[2]);
 
-    glm::mat4 M6 = glm::translate(M, glm::vec3(15.0f, 0.0f, 60.0f));
-    M6 = glm::scale(M6, glm::vec3(1.0f, 6.0f, 6.0f));
-    M6 = glm::rotate(M6, -90.0f*PI/180.0f,glm::vec3(0.0f, 1.0f, 0.0f));
-    drawPainting(M6, paintings[5]);
+    Mp = glm::translate(M, glm::vec3(75.0f, 0.0f, 58.0f));
+    Mp = glm::scale(Mp, glm::vec3(1.0f, 6.0f, 6.0f));
+    Mp = glm::rotate(Mp, 90.0f*PI/180.0f,glm::vec3(0.0f, 1.0f, 0.0f));
+    drawPainting(Mp, paintings[3]);
 
+    Mp = glm::translate(M, glm::vec3(15.0f, 0.0f, 30.0f));
+    Mp = glm::scale(Mp, glm::vec3(1.0f, 6.0f, 6.0f));
+    Mp = glm::rotate(Mp, -90.0f*PI/180.0f,glm::vec3(0.0f, 1.0f, 0.0f));
+    drawPainting(Mp, paintings[4]);
+
+    Mp = glm::translate(M, glm::vec3(15.0f, 0.0f, 60.0f));
+    Mp = glm::scale(Mp, glm::vec3(1.0f, 6.0f, 6.0f));
+    Mp = glm::rotate(Mp, -90.0f*PI/180.0f,glm::vec3(0.0f, 1.0f, 0.0f));
+    drawPainting(Mp, paintings[5]);
+
+    Mp = glm::translate(M, glm::vec3(30.0f, 0.0f, 15.0f));
+    Mp = glm::scale(Mp, glm::vec3(6.0f, 6.0f, 1.0f));
+    Mp = glm::rotate(Mp, 180.0f*PI/180.0f,glm::vec3(0.0f, 1.0f, 0.0f));
+    drawPainting(Mp, paintings[6]);
+
+    Mp = glm::translate(M, glm::vec3(60.0f, 0.0f, 15.0f));
+    Mp = glm::scale(Mp, glm::vec3(6.0f, 6.0f, 1.0f));
+    Mp = glm::rotate(Mp, 180.0f*PI/180.0f,glm::vec3(0.0f, 1.0f, 0.0f));
+    drawPainting(Mp, paintings[7]);
+
+
+    // ROOM 2
+
+    Mp = glm::translate(M, glm::vec3(-34.0f, 0.0f, 75.0f));
+    Mp = glm::scale(Mp, glm::vec3(6.0f, 6.0f, 1.0f));
+    drawPainting(Mp, paintings[8]);
+
+    Mp = glm::translate(M, glm::vec3(-58.0f, 0.0f, 75.0f));
+    Mp = glm::scale(Mp, glm::vec3(6.0f, 6.0f, 1.0f));
+    drawPainting(Mp, paintings[9]);
+
+    Mp = glm::translate(M, glm::vec3(-75.0f, 0.0f, 34.0f));
+    Mp = glm::scale(Mp, glm::vec3(1.0f, 6.0f, 6.0f));
+    Mp = glm::rotate(Mp, -90.0f*PI/180.0f,glm::vec3(0.0f, 1.0f, 0.0f));
+    drawPainting(Mp, paintings[10]);
+
+    Mp = glm::translate(M, glm::vec3(-75.0f, 0.0f, 58.0f));
+    Mp = glm::scale(Mp, glm::vec3(1.0f, 6.0f, 6.0f));
+    Mp = glm::rotate(Mp, -90.0f*PI/180.0f,glm::vec3(0.0f, 1.0f, 0.0f));
+    drawPainting(Mp, paintings[11]);
+
+    Mp = glm::translate(M, glm::vec3(-15.0f, 0.0f, 30.0f));
+    Mp = glm::scale(Mp, glm::vec3(1.0f, 6.0f, 6.0f));
+    Mp = glm::rotate(Mp, 90.0f*PI/180.0f,glm::vec3(0.0f, 1.0f, 0.0f));
+    drawPainting(Mp, paintings[12]);
+
+    Mp = glm::translate(M, glm::vec3(-15.0f, 0.0f, 60.0f));
+    Mp = glm::scale(Mp, glm::vec3(1.0f, 6.0f, 6.0f));
+    Mp = glm::rotate(Mp, 90.0f*PI/180.0f,glm::vec3(0.0f, 1.0f, 0.0f));
+    drawPainting(Mp, paintings[13]);
+
+    Mp = glm::translate(M, glm::vec3(-30.0f, 0.0f, 15.0f));
+    Mp = glm::scale(Mp, glm::vec3(6.0f, 6.0f, 1.0f));
+    Mp = glm::rotate(Mp, 180.0f*PI/180.0f,glm::vec3(0.0f, 1.0f, 0.0f));
+    drawPainting(Mp, paintings[14]);
+
+    Mp = glm::translate(M, glm::vec3(-60.0f, 0.0f, 15.0f));
+    Mp = glm::scale(Mp, glm::vec3(6.0f, 6.0f, 1.0f));
+    Mp = glm::rotate(Mp, 180.0f*PI/180.0f,glm::vec3(0.0f, 1.0f, 0.0f));
+    drawPainting(Mp, paintings[15]);
+
+    // ROOM 3
+
+    Mp = glm::translate(M, glm::vec3(34.0f, 0.0f, -75.0f));
+    Mp = glm::scale(Mp, glm::vec3(6.0f, 6.0f, 1.0f));
+    Mp = glm::rotate(Mp, 180.0f*PI/180.0f,glm::vec3(0.0f, 1.0f, 0.0f));
+    drawPainting(Mp, paintings[16]);
+
+    Mp = glm::translate(M, glm::vec3(58.0f, 0.0f, -75.0f));
+    Mp = glm::scale(Mp, glm::vec3(6.0f, 6.0f, 1.0f));
+    Mp = glm::rotate(Mp, 180.0f*PI/180.0f,glm::vec3(0.0f, 1.0f, 0.0f));
+    drawPainting(Mp, paintings[17]);
+
+    Mp = glm::translate(M, glm::vec3(75.0f, 0.0f, -34.0f));
+    Mp = glm::scale(Mp, glm::vec3(1.0f, 6.0f, 6.0f));
+    Mp = glm::rotate(Mp, 90.0f*PI/180.0f,glm::vec3(0.0f, 1.0f, 0.0f));
+    drawPainting(Mp, paintings[18]);
+
+    Mp = glm::translate(M, glm::vec3(75.0f, 0.0f, -58.0f));
+    Mp = glm::scale(Mp, glm::vec3(1.0f, 6.0f, 6.0f));
+    Mp = glm::rotate(Mp, 90.0f*PI/180.0f,glm::vec3(0.0f, 1.0f, 0.0f));
+    drawPainting(Mp, paintings[19]);
+
+    Mp = glm::translate(M, glm::vec3(15.0f, 0.0f, -30.0f));
+    Mp = glm::scale(Mp, glm::vec3(1.0f, 6.0f, 6.0f));
+    Mp = glm::rotate(Mp, -90.0f*PI/180.0f,glm::vec3(0.0f, 1.0f, 0.0f));
+    drawPainting(Mp, paintings[20]);
+
+    Mp = glm::translate(M, glm::vec3(15.0f, 0.0f, -60.0f));
+    Mp = glm::scale(Mp, glm::vec3(1.0f, 6.0f, 6.0f));
+    Mp = glm::rotate(Mp, -90.0f*PI/180.0f,glm::vec3(0.0f, 1.0f, 0.0f));
+    drawPainting(Mp, paintings[21]);
+
+    Mp = glm::translate(M, glm::vec3(30.0f, 0.0f, -15.0f));
+    Mp = glm::scale(Mp, glm::vec3(6.0f, 6.0f, 1.0f));
+    drawPainting(Mp, paintings[22]);
+
+    Mp = glm::translate(M, glm::vec3(60.0f, 0.0f, -15.0f));
+    Mp = glm::scale(Mp, glm::vec3(6.0f, 6.0f, 1.0f));
+    drawPainting(Mp, paintings[23]);
+
+    // ROOM 4
+
+    Mp = glm::translate(M, glm::vec3(-34.0f, 0.0f, -75.0f));
+    Mp = glm::scale(Mp, glm::vec3(6.0f, 6.0f, 1.0f));
+    Mp = glm::rotate(Mp, 180.0f*PI/180.0f,glm::vec3(0.0f, 1.0f, 0.0f));
+    drawPainting(Mp, paintings[24]);
+
+    Mp = glm::translate(M, glm::vec3(-58.0f, 0.0f, -75.0f));
+    Mp = glm::scale(Mp, glm::vec3(6.0f, 6.0f, 1.0f));
+    Mp = glm::rotate(Mp, 180.0f*PI/180.0f,glm::vec3(0.0f, 1.0f, 0.0f));
+    drawPainting(Mp, paintings[25]);
+
+    Mp = glm::translate(M, glm::vec3(-75.0f, 0.0f, -34.0f));
+    Mp = glm::scale(Mp, glm::vec3(1.0f, 6.0f, 6.0f));
+    Mp = glm::rotate(Mp, -90.0f*PI/180.0f,glm::vec3(0.0f, 1.0f, 0.0f));
+    drawPainting(Mp, paintings[26]);
+
+    Mp = glm::translate(M, glm::vec3(-75.0f, 0.0f, -58.0f));
+    Mp = glm::scale(Mp, glm::vec3(1.0f, 6.0f, 6.0f));
+    Mp = glm::rotate(Mp, -90.0f*PI/180.0f,glm::vec3(0.0f, 1.0f, 0.0f));
+    drawPainting(Mp, paintings[27]);
+
+    Mp = glm::translate(M, glm::vec3(-15.0f, 0.0f, -30.0f));
+    Mp = glm::scale(Mp, glm::vec3(1.0f, 6.0f, 6.0f));
+    Mp = glm::rotate(Mp, 90.0f*PI/180.0f,glm::vec3(0.0f, 1.0f, 0.0f));
+    drawPainting(Mp, paintings[28]);
+
+    Mp = glm::translate(M, glm::vec3(-15.0f, 0.0f, -60.0f));
+    Mp = glm::scale(Mp, glm::vec3(1.0f, 6.0f, 6.0f));
+    Mp = glm::rotate(Mp, 90.0f*PI/180.0f,glm::vec3(0.0f, 1.0f, 0.0f));
+    drawPainting(Mp, paintings[29]);
+
+    Mp = glm::translate(M, glm::vec3(-30.0f, 0.0f, -15.0f));
+    Mp = glm::scale(Mp, glm::vec3(6.0f, 6.0f, 1.0f));
+    drawPainting(Mp, paintings[30]);
+
+    Mp = glm::translate(M, glm::vec3(-60.0f, 0.0f, -15.0f));
+    Mp = glm::scale(Mp, glm::vec3(6.0f, 6.0f, 1.0f));
+    drawPainting(Mp, paintings[31]);
 }
 
 //Drawing procedure
