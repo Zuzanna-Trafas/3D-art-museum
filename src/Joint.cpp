@@ -1,13 +1,17 @@
-#include <glm/glm.hpp>
-#include <glm/gtc/type_ptr.hpp>
-#include <glm/gtc/matrix_transform.hpp>
 #include "Joint.h"
 
+
+Joint::Joint() {
+
+}
 
 Joint::Joint(int _id, std::string _name, glm::mat4 _bindLocalTransform) {
     id = _id;
     name = _name;
     localBindTransform = _bindLocalTransform;
+    animatedTransform = glm::mat4(1.0f);
+    inverseBindTransform = glm::mat4(1.0f);
+    children.resize(1000);
 }
 
 void Joint::addChild(Joint child) {
