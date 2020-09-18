@@ -19,5 +19,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 const float PI = 3.141592653589793f;
 const float CAMERA_SPEED = 10.0f;
 const float MOUSE_SPEED = 0.4f;
+const int MAX_WEIGHTS = 3;
 
 #endif

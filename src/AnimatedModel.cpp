@@ -9,7 +9,7 @@ AnimatedModel::AnimatedModel(Vao _model, GLuint _texture, Joint _rootJoint, int 
     texture = _texture;
     rootJoint = _rootJoint;
     jointCount = _jointCount;
-    animator = new Animator(this);
+    animator = Animator(_rootJoint);
     rootJoint.calcInverseBindTransform(glm::mat4(1.0f));
 
 }

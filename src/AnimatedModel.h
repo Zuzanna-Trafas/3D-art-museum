@@ -7,6 +7,8 @@
 
 #include "Joint.h"
 #include "Animator.h"
+#include "Animation.h"
+#include "Vao.h"
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
@@ -17,7 +19,7 @@
 class AnimatedModel {
 private:
     // skin
-    Vao model; // VAO, idk if int
+    Vao model;
     GLuint texture;
 
     //skeleton
@@ -25,7 +27,9 @@ private:
     int jointCount;
 
     Animator animator;
+
 public:
+    AnimatedModel() {}
     AnimatedModel(Vao _model, GLuint _texture, Joint _rootJoint, int jointCount);
     virtual ~AnimatedModel();
     Vao getModel();

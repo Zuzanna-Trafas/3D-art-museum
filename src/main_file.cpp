@@ -30,7 +30,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "res/models/allmodels.h"
 #include "lodepng.h"
 #include "shaderprogram.h"
-#include "Camera.cpp"
 #include "Camera.h"
 
 
