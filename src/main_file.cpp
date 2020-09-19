@@ -31,16 +31,24 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "lodepng.h"
 #include "shaderprogram.h"
 #include "Camera.h"
-
+#include "VAO.h"
+#include "EB.h"
+#include "Human.h"
+#include "../OBJ_Loader.h"
 
 float aspectRatio = 1;
 Camera *camera;
+VAO *vao;
+EB *ebo;
+objl::Loader loader;
+std::vector<Human> humans;
 
 GLuint walls;
 GLuint floors;
 GLuint ceilings;
 GLuint frame;
 GLuint paintings[40];
+
 
 //Error processing callback procedure
 void error_callback(int error, const char* description) {
@@ -73,6 +81,38 @@ void windowResizeCallback(GLFWwindow *window, int width, int height) {
     aspectRatio = (float) width / (float) height;
     glViewport(0,0,width,height);
 }
+
+void processMesh(objl::Mesh Mesh) {
+    int vertexCount = Mesh.Vertices.size();
+    std::vector<float> vertices;
+    objl::Vertex vertex;
+    for (int i = 0; i < vertexCount; i++) {
+        vertex = Mesh.Vertices[i];
+        vertices.push_back(vertex.Position.X);
+        vertices.push_back(vertex.Position.Y);
+        vertices.push_back(vertex.Position.Z);
+
+        vertices.push_back(vertex.Normal.X);
+        vertices.push_back(vertex.Normal.Y);
+        vertices.push_back(vertex.Normal.Z);
+
+        vertices.push_back(vertex.TextureCoordinate.X);
+        vertices.push_back(vertex.TextureCoordinate.Y);
+    }
+
+    vao = new VAO();
+    vao->Bind();
+
+    VBO *vbo = new VBO(vertices.data(), vertexCount * 8);
+    /*
+    vao->AddLayout(*vbo, 0, 3, 8, 0);
+    vao->AddLayout(*vbo, 1, 3, 8, 3);
+    vao->AddLayout(*vbo, 2, 2, 8, 6);
+
+    ebo = new EB(Mesh.Indices.data(), Mesh.Indices.size());
+     */
+}
+
 //Initialization code procedure
 void initOpenGLProgram(GLFWwindow* window) {
 	initShaders();
@@ -99,6 +139,22 @@ void initOpenGLProgram(GLFWwindow* window) {
     // initialize the camera in the center of a room
     camera = new Camera(glm::vec3(45.0f, 0.0f,  45.0f),
                         glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, 1.0f,  0.0f));
+
+    //animatedModel = animatedModelLoader.loadEntity("object.dae", "tex.png");
+    //HumanModel humanModelHumanModel("../res/models/woman1.obj");
+    /*
+
+    if (!loader.LoadFile("./res/models/woman1.obj")) {
+        fprintf(stderr, "Cannot read obj file\n");
+        exit(EXIT_FAILURE);
+    }
+    processMesh(loader.LoadedMeshes[0]);
+
+    Human newHuman(vao, ebo, spTextured);
+    newHuman.position = glm::vec3(45.0f, 0.0f, 45.0f);
+    humans.push_back(newHuman);
+     */
+
 }
 
 //Release resources allocated by the program
@@ -338,6 +394,16 @@ void drawScene(GLFWwindow* window) {
 
 	drawWalls();
 	decorateWalls();
+	for (Human human : humans) {
+	    human.drawHuman(glm::mat4(1.0f));
+	}
+    /*
+    glm::mat4 M = glm::translate(glm::mat4(1.0f), glm::vec3(55.0f, 1.8f, 55.0f));
+    glUniformMatrix4fv(spTextured->u("M"), 1, false, glm::value_ptr(M));
+
+    AnimatedModelRenderer animatedModelRenderer;
+    animatedModelRenderer.render(animatedModel);
+     */
 
     glfwSwapBuffers(window); //Copy back buffer to the front buffer
 }

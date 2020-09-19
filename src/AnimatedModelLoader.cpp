@@ -16,6 +16,10 @@ AnimatedModel AnimatedModelLoader::loadEntity(std::string modelFile, std::string
     return AnimatedModel(model, texture, headJoint, skeletonData.jointCount);
 }
 
+AnimatedModelData AnimatedModelLoader::loadData(std::string modelFile) {
+    return colladaLoader.loadColladaModel(modelFile, MAX_WEIGHTS);
+}
+
 GLuint AnimatedModelLoader::loadTexture(std::string textureFile) {
     GLuint tex;
     glActiveTexture(GL_TEXTURE0);

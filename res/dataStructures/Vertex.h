@@ -12,7 +12,7 @@
 #include "VertexSkinData.h"
 
 class Vertex {
-private:
+public:
     int NO_INDEX = -1;
 
     glm::vec3 position;
@@ -25,7 +25,7 @@ private:
     glm::vec3 averagedTangent;
 
     VertexSkinData weightsData;
-public:
+
     Vertex();
     Vertex(int _index, glm::vec3 _position, VertexSkinData _weightsData);
     glm::vec3 getPosition() {return position;}

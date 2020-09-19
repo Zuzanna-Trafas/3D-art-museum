@@ -24,6 +24,7 @@
 
 class AnimatedModelLoader {
     AnimatedModel loadEntity(std::string modelFile, std::string textureFile);
+    AnimatedModelData loadData(std::string modelFile);
     GLuint loadTexture(std::string textureFile);
     Joint createJoints(JointData data);
     Vao createVao(MeshData data);

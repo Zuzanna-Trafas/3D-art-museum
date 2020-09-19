@@ -6,6 +6,9 @@
 using namespace rapidxml;
 
 AnimatedModelData loadColladaModel(std::string colladaFile, int maxWeights) {
+    file<> xmlFile(colladaFile); // Default template is char
+    xml_document<> doc;
+    doc.parse<0>(xmlFile.data());
     /*
     colladaFile <> document; // domyślnym typem jest char
     try {

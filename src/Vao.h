@@ -19,8 +19,8 @@ public:
     Vao();
     ~Vao();
     int getIndexCount() {return indexCount;}
-    void bind();
-    void unbind();
+    void bind(std::vector<GLuint> attributes);
+    void unbind(std::vector<GLuint> attributes);
     void createIndexBuffer(std::vector<int> indices);
     void createAttributeFloat(int attribute, std::vector<float> data, int attrSize);
     void createAttributeInt(int attribute, std::vector<int> data, int attrSize);

@@ -16,11 +16,15 @@ Vao::~Vao() {
     delete &indexVbo;
 }
 
-void Vao::bind() {
-    glBindVertexArray(id);
+void Vao::bind(std::vector<GLuint> attributes) {
+    for (int i : attributes) {
+        glBindVertexArray(i);
+    }
 }
-void Vao::unbind() {
-    glBindVertexArray(0);
+void Vao::unbind(std::vector<GLuint> attributes) {
+    for (int i : attributes) {
+        glBindVertexArray(i, 0);
+    }
 }
 
 void Vao::createIndexBuffer(std::vector<int> indices) {
@@ -43,7 +47,7 @@ void Vao::createAttributeInt(int attribute, std::vector<int> data, int attrSize)
     Vbo dataVbo = Vbo(GL_ARRAY_BUFFER);
     dataVbo.bind();
     dataVbo.storeDataInt(data);
-    glVertexAttribIPointer(attribute, attrSize, GL_INT, false, attrSize * sizeof(int), 0);
+    glVertexAttribPointer(attribute, attrSize, GL_INT, false, attrSize * sizeof(int), 0); //TODO glVertexAttribIPointer
     dataVbo.unbind();
     dataVbos.push_back(dataVbo);
 }
