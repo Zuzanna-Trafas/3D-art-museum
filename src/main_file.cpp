@@ -169,12 +169,12 @@ void freeOpenGLProgram(GLFWwindow* window) {
 
 void drawPainting(glm::mat4 M, GLuint tex) {
     glm::mat4 M1 = glm::scale(M,glm::vec3(1.0f,1.0f,0.15f));
-    glUniformMatrix4fv(spTextured->u("M"), 1, false, glm::value_ptr(M1));
+    glUniformMatrix4fv(spShader->u("M"), 1, false, glm::value_ptr(M1));
     Models::cube.drawCube(frame);
 
     glm::mat4 M2 = glm::translate(M1, glm::vec3(0.0f, 0.0f, -1.4f));
     M2 = glm::scale(M2,glm::vec3(0.9f,0.9f,0.2f));
-    glUniformMatrix4fv(spTextured->u("M"), 1, false, glm::value_ptr(M2));
+    glUniformMatrix4fv(spShader->u("M"), 1, false, glm::value_ptr(M2));
     Models::cube.drawCube(tex);
 }
 
@@ -187,22 +187,22 @@ void drawWalls() {
     // and translate the first room so that the (0,0) point would be in the center of the museum
     M = glm::translate(M,glm::vec3(-1.5f,0.2f,1.5f));
 
-    glUniformMatrix4fv(spTextured->u("M"), 1, false, glm::value_ptr(M));
+    glUniformMatrix4fv(spShader->u("M"), 1, false, glm::value_ptr(M));
     Models::walls.drawWalls(walls, floors, ceilings); //Draw object
 
     glm::mat4 M2 = glm::translate(M,glm::vec3(0.0f,0.0f,-3.0f));
     M2 = glm::rotate(M2, -90.0f * PI / 180.0f, glm::vec3(0.0f,1.0f,0.0f));
-    glUniformMatrix4fv(spTextured->u("M"), 1, false, glm::value_ptr(M2));
+    glUniformMatrix4fv(spShader->u("M"), 1, false, glm::value_ptr(M2));
     Models::walls.drawWalls(walls, floors, ceilings);
 
     glm::mat4 M3 = glm::translate(M2,glm::vec3(0.0f,0.0f,-3.0f));
     M3 = glm::rotate(M3, -90.0f * PI / 180.0f, glm::vec3(0.0f,1.0f,0.0f));
-    glUniformMatrix4fv(spTextured->u("M"), 1, false, glm::value_ptr(M3));
+    glUniformMatrix4fv(spShader->u("M"), 1, false, glm::value_ptr(M3));
     Models::walls.drawWalls(walls, floors, ceilings);
 
     glm::mat4 M4 = glm::translate(M3,glm::vec3(0.0f,0.0f,-3.0f));
     M4 = glm::rotate(M4, -90.0f * PI / 180.0f, glm::vec3(0.0f,1.0f,0.0f));
-    glUniformMatrix4fv(spTextured->u("M"), 1, false, glm::value_ptr(M4));
+    glUniformMatrix4fv(spShader->u("M"), 1, false, glm::value_ptr(M4));
     Models::walls.drawWalls(walls, floors, ceilings);
 }
 
@@ -387,10 +387,10 @@ void drawScene(GLFWwindow* window) {
 	glm::mat4 V = camera->getView();
 	glm::mat4 P = glm::perspective(glm::radians(50.0f), aspectRatio, 1.0f, 50.0f); //Compute projection matrix
 
-    spTextured->use(); //Activate shader program
+    spShader->use(); //Activate shader program
 	// glUniform4f(spTextured->u("color"), 1, 1, 1, 1); //Copy object color to shader program internal variable
-	glUniformMatrix4fv(spTextured->u("P"), 1, false, glm::value_ptr(P)); //Copy projection matrix to shader program internal variable
-	glUniformMatrix4fv(spTextured->u("V"), 1, false, glm::value_ptr(V)); //Copy view matrix to shader program internal variable
+	glUniformMatrix4fv(spShader->u("P"), 1, false, glm::value_ptr(P)); //Copy projection matrix to shader program internal variable
+	glUniformMatrix4fv(spShader->u("V"), 1, false, glm::value_ptr(V)); //Copy view matrix to shader program internal variable
 
 	drawWalls();
 	decorateWalls();
