@@ -142,19 +142,17 @@ void initOpenGLProgram(GLFWwindow* window) {
     camera = new Camera(glm::vec3(45.0f, 0.0f,  45.0f),
                         glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, 1.0f,  0.0f));
 
-
     for (int i = 0; i < 30; i++) {
         std::string s = std::to_string(i+1);
         char const *pchar = s.c_str();
         if (i < 9) {
-            strcpy(path,"./res/models/animation2/woman_00000");
+            strcpy(path,"./res/models/animation/malex_00000");
         } else {
-            strcpy(path,"./res/models/animation2/woman_0000");
+            strcpy(path,"./res/models/animation/malex_0000");
         }
         strcat(path, pchar);
         strcat(path, ".obj");
         printf("\n\n Path: %s \n\n", path);
-
 
         if (!loader.LoadFile(path)) {
             fprintf(stderr, "Cannot read obj file\n");
@@ -163,44 +161,44 @@ void initOpenGLProgram(GLFWwindow* window) {
 
         //skin
         processMesh(loader.LoadedMeshes[0]);
-        texture = new Texture("res/textures/humanTextures/skin.png", "textureMap0");
+        texture = new Texture("res/textures/humanTextures2/middleage_lightskinned_male_diffuse.png", "textureMap0");
         Human human(vao, ebo, texture, spShader);
         human.position = glm::vec3(32.0f, -7.0f, 65.0f);
         human.scale = glm::vec3(0.62f, 0.62f, 0.62f);
 
         //hair
         processMesh(loader.LoadedMeshes[1]);
-        texture = new Texture("res/textures/humanTextures/short01_diffuse.png", "textureMap0");
+        texture = new Texture("res/textures/humanTextures2/short02_diffuse.png", "textureMap0");
         human.add(vao, ebo, texture, 1);
 
         //eyes
         processMesh(loader.LoadedMeshes[2]);
-        texture = new Texture("res/textures/humanTextures/brown_eye.png", "textureMap0");
+        texture = new Texture("res/textures/humanTextures2/brown_eye.png", "textureMap0");
         human.add(vao, ebo, texture, 2);
 
         //eyebrows
         processMesh(loader.LoadedMeshes[3]);
-        texture = new Texture("res/textures/humanTextures/eyebrow006.png", "textureMap0");
+        texture = new Texture("res/textures/humanTextures2/eyebrow009.png", "textureMap0");
         human.add(vao, ebo, texture, 3);
 
         //something close to head
         processMesh(loader.LoadedMeshes[4]);
-        texture = new Texture("res/textures/humanTextures/teeth.png", "textureMap0");
+        texture = new Texture("res/textures/humanTextures2/teeth.png", "textureMap0");
         human.add(vao, ebo, texture, 4);
 
         //tongue
         processMesh(loader.LoadedMeshes[5]);
-        texture = new Texture("res/textures/humanTextures/tongue01_diffuse.png", "textureMap0");
+        texture = new Texture("res/textures/humanTextures2/tongue01_diffuse.png", "textureMap0");
         human.add(vao, ebo, texture, 5);
 
         //trousers and tshirt
         processMesh(loader.LoadedMeshes[6]);
-        texture = new Texture("res/textures/humanTextures/female_casualsuit01_diffuse.png", "textureMap0");
+        texture = new Texture("res/textures/humanTextures2/male_casualsuit05_diffuse.png", "textureMap0");
         human.add(vao, ebo, texture, 6);
 
         //shoes
         processMesh(loader.LoadedMeshes[7]);
-        texture = new Texture("res/textures/humanTextures/shoes05_diffuse.png", "textureMap0");
+        texture = new Texture("res/textures/humanTextures2/shoes02_diffuse.png", "textureMap0");
         human.add(vao, ebo, texture, 7);
         animation.push_back(human);
     }
@@ -228,7 +226,7 @@ void initOpenGLProgram(GLFWwindow* window) {
         texture = new Texture("res/textures/humanTextures/skin.png", "textureMap0");
         Human human(vao, ebo, texture, spShader);
         human.position = glm::vec3(36.0f, -7.0f, 65.0f);
-        human.scale = glm::vec3(0.5f, 0.5f, 0.5f);
+        human.scale = glm::vec3(0.62f, 0.62f, 0.62f);
 
         //hair
         processMesh(loader.LoadedMeshes[1]);
@@ -477,9 +475,9 @@ void decorateWalls() {
     drawPainting(Mp, paintings[28]);
 
     Mp = glm::translate(M, glm::vec3(-15.0f, 0.0f, -60.0f));
-    Mp = glm::scale(Mp, glm::vec3(1.0f, 7.6f, 6.0f));
+    Mp = glm::scale(Mp, glm::vec3(1.0f, 4.45f, 5.12f));
     Mp = glm::rotate(Mp, 90.0f*PI/180.0f,glm::vec3(0.0f, 1.0f, 0.0f));
-    drawPainting(Mp, paintings[29]);
+    drawPainting(Mp, paintings[35]);
 
     Mp = glm::translate(M, glm::vec3(-30.0f, 0.0f, -15.0f));
     Mp = glm::scale(Mp, glm::vec3(7.6f, 6.0f, 1.0f));

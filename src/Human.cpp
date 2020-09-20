@@ -32,6 +32,9 @@ void Human::drawHuman(glm::mat4 M) {
     M = glm::scale(M, scale);
     glUniformMatrix4fv(sp->u("M"), 1, false, glm::value_ptr(M));
     for (int i = 0; i < 8; i++) {
+        if (i == 2) {
+            continue;
+        }
         vao[i]->Bind();
         ebo[i]->Bind();
 
