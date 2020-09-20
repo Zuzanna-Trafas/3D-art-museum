@@ -14,7 +14,7 @@ in vec4 notNormalizedLightVector[4];
 
 float distanceParameter(vec4 notNormalizedLightVector){
     float dist = length(notNormalizedLightVector);
-    float maxDistance = 48.6;
+    float maxDistance = 48.6; //wyznaczone eksperymentalnie
     if (dist >= maxDistance){
         return 0.0;
     } else {
@@ -26,8 +26,10 @@ vec4 color(vec4 lightVector, vec4 notNormalizedLightVector){
     vec4 normalizedLightVector = normalize(lightVector);
     vec4 normalizedNormalVector = normalize(normalVector);
     vec4 normalizedViewerVector = normalize(viewerVector);
+    //wektor obity:
     vec4 reflectedVector = reflect(-normalizedLightVector, normalizedNormalVector);
-
+	
+    //obliczania oświetlenia - kd, ks dotyczą modelu phonga
     float nl = 0;
     float rv = 0;
     vec4 kd = texture(textureMap1, iTexCoord0);
