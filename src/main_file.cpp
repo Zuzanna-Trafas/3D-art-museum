@@ -165,8 +165,8 @@ void initOpenGLProgram(GLFWwindow* window) {
         //skin
         processMesh(loader.LoadedMeshes[0]);
         texture = new Texture("res/models/female1/textures/skin.png", "textureMap0");
-        Human human(vao, ebo, texture, spTextured);
-        human.position = glm::vec3(32.0f, -7.0f, 68.0f);
+        Human human(vao, ebo, texture, spShader);
+        human.position = glm::vec3(32.0f, -7.0f, 65.0f);
         human.scale = glm::vec3(0.62f, 0.62f, 0.62f);
 
         //hair
@@ -210,9 +210,9 @@ void initOpenGLProgram(GLFWwindow* window) {
         std::string s = std::to_string(i+1);
         char const *pchar = s.c_str();
         if (i < 9) {
-            strcpy(path,"./res/models/animation2/woman_00000");
+            strcpy(path,"./res/models/animation4/woman_00000");
         } else {
-            strcpy(path,"./res/models/animation2/woman_0000");
+            strcpy(path,"./res/models/animation4/woman_0000");
         }
         strcat(path, pchar);
         strcat(path, ".obj");
@@ -227,8 +227,8 @@ void initOpenGLProgram(GLFWwindow* window) {
         //skin
         processMesh(loader.LoadedMeshes[0]);
         texture = new Texture("res/models/female1/textures/skin.png", "textureMap0");
-        Human human(vao, ebo, texture, spTextured);
-        human.position = glm::vec3(36.0f, -7.0f, 68.0f);
+        Human human(vao, ebo, texture, spShader);
+        human.position = glm::vec3(36.0f, -7.0f, 65.0f);
         human.scale = glm::vec3(0.5f, 0.5f, 0.5f);
 
         //hair
@@ -281,12 +281,12 @@ void freeOpenGLProgram(GLFWwindow* window) {
 
 void drawPainting(glm::mat4 M, GLuint tex) {
     glm::mat4 M1 = glm::scale(M,glm::vec3(1.0f,1.0f,0.15f));
-    glUniformMatrix4fv(spTextured->u("M"), 1, false, glm::value_ptr(M1));
+    glUniformMatrix4fv(spShader->u("M"), 1, false, glm::value_ptr(M1));
     Models::cube.drawCube(frame);
 
     glm::mat4 M2 = glm::translate(M1, glm::vec3(0.0f, 0.0f, -1.4f));
     M2 = glm::scale(M2,glm::vec3(0.9f,0.9f,0.2f));
-    glUniformMatrix4fv(spTextured->u("M"), 1, false, glm::value_ptr(M2));
+    glUniformMatrix4fv(spShader->u("M"), 1, false, glm::value_ptr(M2));
     Models::cube.drawCube(tex);
 }
 
@@ -299,22 +299,22 @@ void drawMuseumWalls() {
     // and translate the first room so that the (0,0) point would be in the center of the museum
     M = glm::translate(M,glm::vec3(-1.5f,0.2f,1.5f));
 
-    glUniformMatrix4fv(spTextured->u("M"), 1, false, glm::value_ptr(M));
+    glUniformMatrix4fv(spShader->u("M"), 1, false, glm::value_ptr(M));
     Models::walls.drawWalls(walls, floors, ceilings); //Draw object
 
     glm::mat4 M2 = glm::translate(M,glm::vec3(0.0f,0.0f,-3.0f));
     M2 = glm::rotate(M2, -90.0f * PI / 180.0f, glm::vec3(0.0f,1.0f,0.0f));
-    glUniformMatrix4fv(spTextured->u("M"), 1, false, glm::value_ptr(M2));
+    glUniformMatrix4fv(spShader->u("M"), 1, false, glm::value_ptr(M2));
     Models::walls.drawWalls(walls, floors, ceilings);
 
     glm::mat4 M3 = glm::translate(M2,glm::vec3(0.0f,0.0f,-3.0f));
     M3 = glm::rotate(M3, -90.0f * PI / 180.0f, glm::vec3(0.0f,1.0f,0.0f));
-    glUniformMatrix4fv(spTextured->u("M"), 1, false, glm::value_ptr(M3));
+    glUniformMatrix4fv(spShader->u("M"), 1, false, glm::value_ptr(M3));
     Models::walls.drawWalls(walls, floors, ceilings);
 
     glm::mat4 M4 = glm::translate(M3,glm::vec3(0.0f,0.0f,-3.0f));
     M4 = glm::rotate(M4, -90.0f * PI / 180.0f, glm::vec3(0.0f,1.0f,0.0f));
-    glUniformMatrix4fv(spTextured->u("M"), 1, false, glm::value_ptr(M4));
+    glUniformMatrix4fv(spShader->u("M"), 1, false, glm::value_ptr(M4));
     Models::walls.drawWalls(walls, floors, ceilings);
 }
 
@@ -324,7 +324,7 @@ void decorateWalls() {
      * (15,15)  (15,75)  (75,15)  (75,75)
      */
 
-    //glUniform4f(spTextured->u("color"), 0, 0, 1, 1); //Copy object color to shader program internal variable
+    //glUniform4f(spShader->u("color"), 0, 0, 1, 1); //Copy object color to shader program internal variable
 
     glm::mat4 M = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 1.8f, 0.0f)); // move up so the painting will be at the center
 
@@ -413,82 +413,82 @@ void decorateWalls() {
     // ROOM 3
 
     Mp = glm::translate(M, glm::vec3(34.0f, 0.0f, -75.0f));
-    Mp = glm::scale(Mp, glm::vec3(6.0f, 6.0f, 1.0f));
+    Mp = glm::scale(Mp, glm::vec3(4.0f, 4.6f, 1.0f));
     Mp = glm::rotate(Mp, 180.0f*PI/180.0f,glm::vec3(0.0f, 1.0f, 0.0f));
     drawPainting(Mp, paintings[16]);
 
     Mp = glm::translate(M, glm::vec3(58.0f, 0.0f, -75.0f));
-    Mp = glm::scale(Mp, glm::vec3(6.0f, 6.0f, 1.0f));
+    Mp = glm::scale(Mp, glm::vec3(10.0f, 5.0f, 1.0f));
     Mp = glm::rotate(Mp, 180.0f*PI/180.0f,glm::vec3(0.0f, 1.0f, 0.0f));
-    drawPainting(Mp, paintings[17]);
+    drawPainting(Mp, paintings[33]);
 
     Mp = glm::translate(M, glm::vec3(75.0f, 0.0f, -34.0f));
-    Mp = glm::scale(Mp, glm::vec3(1.0f, 6.0f, 6.0f));
+    Mp = glm::scale(Mp, glm::vec3(1.0f, 7.5f, 6.0f));
     Mp = glm::rotate(Mp, 90.0f*PI/180.0f,glm::vec3(0.0f, 1.0f, 0.0f));
     drawPainting(Mp, paintings[18]);
 
     Mp = glm::translate(M, glm::vec3(75.0f, 0.0f, -58.0f));
-    Mp = glm::scale(Mp, glm::vec3(1.0f, 6.0f, 6.0f));
+    Mp = glm::scale(Mp, glm::vec3(1.0f, 6.0f, 8.8f));
     Mp = glm::rotate(Mp, 90.0f*PI/180.0f,glm::vec3(0.0f, 1.0f, 0.0f));
     drawPainting(Mp, paintings[19]);
 
     Mp = glm::translate(M, glm::vec3(15.0f, 0.0f, -30.0f));
-    Mp = glm::scale(Mp, glm::vec3(1.0f, 6.0f, 6.0f));
+    Mp = glm::scale(Mp, glm::vec3(1.0f, 6.0f, 8.0f));
     Mp = glm::rotate(Mp, -90.0f*PI/180.0f,glm::vec3(0.0f, 1.0f, 0.0f));
     drawPainting(Mp, paintings[20]);
 
     Mp = glm::translate(M, glm::vec3(15.0f, 0.0f, -60.0f));
-    Mp = glm::scale(Mp, glm::vec3(1.0f, 6.0f, 6.0f));
+    Mp = glm::scale(Mp, glm::vec3(1.0f, 6.0f, 9.0f));
     Mp = glm::rotate(Mp, -90.0f*PI/180.0f,glm::vec3(0.0f, 1.0f, 0.0f));
     drawPainting(Mp, paintings[21]);
 
     Mp = glm::translate(M, glm::vec3(30.0f, 0.0f, -15.0f));
-    Mp = glm::scale(Mp, glm::vec3(6.0f, 6.0f, 1.0f));
+    Mp = glm::scale(Mp, glm::vec3(9.0f, 6.0f, 1.0f));
     drawPainting(Mp, paintings[22]);
 
     Mp = glm::translate(M, glm::vec3(60.0f, 0.0f, -15.0f));
-    Mp = glm::scale(Mp, glm::vec3(6.0f, 6.0f, 1.0f));
+    Mp = glm::scale(Mp, glm::vec3(9.0f, 4.0f, 1.0f));
     drawPainting(Mp, paintings[23]);
 
     // ROOM 4
 
     Mp = glm::translate(M, glm::vec3(-34.0f, 0.0f, -75.0f));
-    Mp = glm::scale(Mp, glm::vec3(6.0f, 6.0f, 1.0f));
+    Mp = glm::scale(Mp, glm::vec3(8.0f, 6.0f, 1.0f));
     Mp = glm::rotate(Mp, 180.0f*PI/180.0f,glm::vec3(0.0f, 1.0f, 0.0f));
     drawPainting(Mp, paintings[24]);
 
     Mp = glm::translate(M, glm::vec3(-58.0f, 0.0f, -75.0f));
-    Mp = glm::scale(Mp, glm::vec3(6.0f, 6.0f, 1.0f));
+    Mp = glm::scale(Mp, glm::vec3(6.0f, 7.2f, 1.0f));
     Mp = glm::rotate(Mp, 180.0f*PI/180.0f,glm::vec3(0.0f, 1.0f, 0.0f));
     drawPainting(Mp, paintings[25]);
 
     Mp = glm::translate(M, glm::vec3(-75.0f, 0.0f, -34.0f));
-    Mp = glm::scale(Mp, glm::vec3(1.0f, 6.0f, 6.0f));
+    Mp = glm::scale(Mp, glm::vec3(1.0f, 7.2f, 6.0f));
     Mp = glm::rotate(Mp, -90.0f*PI/180.0f,glm::vec3(0.0f, 1.0f, 0.0f));
     drawPainting(Mp, paintings[26]);
 
     Mp = glm::translate(M, glm::vec3(-75.0f, 0.0f, -58.0f));
-    Mp = glm::scale(Mp, glm::vec3(1.0f, 6.0f, 6.0f));
+    Mp = glm::scale(Mp, glm::vec3(1.0f, 6.0f, 4.0f));
     Mp = glm::rotate(Mp, -90.0f*PI/180.0f,glm::vec3(0.0f, 1.0f, 0.0f));
     drawPainting(Mp, paintings[27]);
 
     Mp = glm::translate(M, glm::vec3(-15.0f, 0.0f, -30.0f));
-    Mp = glm::scale(Mp, glm::vec3(1.0f, 6.0f, 6.0f));
+    Mp = glm::scale(Mp, glm::vec3(1.0f, 4.0f, 8.0f));
     Mp = glm::rotate(Mp, 90.0f*PI/180.0f,glm::vec3(0.0f, 1.0f, 0.0f));
     drawPainting(Mp, paintings[28]);
 
     Mp = glm::translate(M, glm::vec3(-15.0f, 0.0f, -60.0f));
-    Mp = glm::scale(Mp, glm::vec3(1.0f, 6.0f, 6.0f));
+    Mp = glm::scale(Mp, glm::vec3(1.0f, 7.6f, 6.0f));
     Mp = glm::rotate(Mp, 90.0f*PI/180.0f,glm::vec3(0.0f, 1.0f, 0.0f));
     drawPainting(Mp, paintings[29]);
 
     Mp = glm::translate(M, glm::vec3(-30.0f, 0.0f, -15.0f));
-    Mp = glm::scale(Mp, glm::vec3(6.0f, 6.0f, 1.0f));
+    Mp = glm::scale(Mp, glm::vec3(7.6f, 6.0f, 1.0f));
     drawPainting(Mp, paintings[30]);
 
     Mp = glm::translate(M, glm::vec3(-60.0f, 0.0f, -15.0f));
-    Mp = glm::scale(Mp, glm::vec3(6.0f, 6.0f, 1.0f));
-    drawPainting(Mp, paintings[31]);
+    Mp = glm::scale(Mp, glm::vec3(7.0f, 6.0f, 1.0f));
+    drawPainting(Mp, paintings[37]);
 }
 
 //Drawing procedure
@@ -497,17 +497,17 @@ void drawScene(GLFWwindow* window, int animationMoment) {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //Clear color and depth buffers
 
 	glm::mat4 V = camera->getView();
-	glm::mat4 P = glm::perspective(glm::radians(50.0f), aspectRatio, 1.0f, 50.0f); //Compute projection matrix
+	glm::mat4 P = glm::perspective(glm::radians(50.0f), aspectRatio, 1.0f, 150.0f); //Compute projection matrix
 
-    spTextured->use(); //Activate shader program
-	// glUniform4f(spTextured->u("color"), 1, 1, 1, 1); //Copy object color to shader program internal variable
-	glUniformMatrix4fv(spTextured->u("P"), 1, false, glm::value_ptr(P)); //Copy projection matrix to shader program internal variable
-	glUniformMatrix4fv(spTextured->u("V"), 1, false, glm::value_ptr(V)); //Copy view matrix to shader program internal variable
+    spShader->use(); //Activate shader program
+	// glUniform4f(spShader->u("color"), 1, 1, 1, 1); //Copy object color to shader program internal variable
+	glUniformMatrix4fv(spShader->u("P"), 1, false, glm::value_ptr(P)); //Copy projection matrix to shader program internal variable
+	glUniformMatrix4fv(spShader->u("V"), 1, false, glm::value_ptr(V)); //Copy view matrix to shader program internal variable
 
 	drawMuseumWalls();
 	decorateWalls();
 
-	animationMoment1 = 0;
+	int animationMoment1 = 0;
 	if (animationMoment <= 15) {
         animationMoment1 = animationMoment;
     } else if (animationMoment > 15 && animationMoment < 75) {
@@ -517,7 +517,7 @@ void drawScene(GLFWwindow* window, int animationMoment) {
 	}
 
     animation.at(animationMoment1).drawHuman(glm::mat4(1.0f));
-    animation2.at(animationMoment2).drawHuman(glm::mat4(1.0f));
+    animation2.at(animationMoment1).drawHuman(glm::mat4(1.0f));
 
     glfwSwapBuffers(window); //Copy back buffer to the front buffer
 }

@@ -36,9 +36,7 @@ public:
 	GLuint a(const char* variableName); //Returns the slot number corresponding to the attribute variableName
 };
 
-extern ShaderProgram *spConstant;
-extern ShaderProgram *spLambert;
-extern ShaderProgram *spTextured;
+extern ShaderProgram *spShader;
 
 void initShaders();
 void freeShaders();
