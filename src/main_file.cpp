@@ -50,7 +50,6 @@ GLuint floors;
 GLuint ceilings;
 GLuint frame;
 Texture *texture;
-Texture* textures[8];
 GLuint paintings[40];
 
 
@@ -129,7 +128,7 @@ void initOpenGLProgram(GLFWwindow* window) {
     floors=readTexture("res/textures/floor.png");
     ceilings=readTexture("res/textures/ceiling.png");
     frame=readTexture("res/textures/frame.png");
-    // read all painting textures
+    // read all painting humanTextures
     char path[50];
     for (int i=0; i<38 ; i++) {
         std::string s = std::to_string(i+1);
@@ -164,44 +163,44 @@ void initOpenGLProgram(GLFWwindow* window) {
 
         //skin
         processMesh(loader.LoadedMeshes[0]);
-        texture = new Texture("res/models/female1/textures/skin.png", "textureMap0");
+        texture = new Texture("res/textures/humanTextures/skin.png", "textureMap0");
         Human human(vao, ebo, texture, spShader);
         human.position = glm::vec3(32.0f, -7.0f, 65.0f);
         human.scale = glm::vec3(0.62f, 0.62f, 0.62f);
 
         //hair
         processMesh(loader.LoadedMeshes[1]);
-        texture = new Texture("res/models/female1/textures/short01_diffuse.png", "textureMap0");
+        texture = new Texture("res/textures/humanTextures/short01_diffuse.png", "textureMap0");
         human.add(vao, ebo, texture, 1);
 
         //eyes
         processMesh(loader.LoadedMeshes[2]);
-        texture = new Texture("res/models/female1/textures/brown_eye.png", "textureMap0");
+        texture = new Texture("res/textures/humanTextures/brown_eye.png", "textureMap0");
         human.add(vao, ebo, texture, 2);
 
         //eyebrows
         processMesh(loader.LoadedMeshes[3]);
-        texture = new Texture("res/models/female1/textures/eyebrow006.png", "textureMap0");
+        texture = new Texture("res/textures/humanTextures/eyebrow006.png", "textureMap0");
         human.add(vao, ebo, texture, 3);
 
         //something close to head
         processMesh(loader.LoadedMeshes[4]);
-        texture = new Texture("res/models/female1/textures/teeth.png", "textureMap0");
+        texture = new Texture("res/textures/humanTextures/teeth.png", "textureMap0");
         human.add(vao, ebo, texture, 4);
 
         //tongue
         processMesh(loader.LoadedMeshes[5]);
-        texture = new Texture("res/models/female1/textures/tongue01_diffuse.png", "textureMap0");
+        texture = new Texture("res/textures/humanTextures/tongue01_diffuse.png", "textureMap0");
         human.add(vao, ebo, texture, 5);
 
         //trousers and tshirt
         processMesh(loader.LoadedMeshes[6]);
-        texture = new Texture("res/models/female1/textures/female_casualsuit01_diffuse.png", "textureMap0");
+        texture = new Texture("res/textures/humanTextures/female_casualsuit01_diffuse.png", "textureMap0");
         human.add(vao, ebo, texture, 6);
 
         //shoes
         processMesh(loader.LoadedMeshes[7]);
-        texture = new Texture("res/models/female1/textures/shoes05_diffuse.png", "textureMap0");
+        texture = new Texture("res/textures/humanTextures/shoes05_diffuse.png", "textureMap0");
         human.add(vao, ebo, texture, 7);
         animation.push_back(human);
     }
@@ -226,44 +225,44 @@ void initOpenGLProgram(GLFWwindow* window) {
 
         //skin
         processMesh(loader.LoadedMeshes[0]);
-        texture = new Texture("res/models/female1/textures/skin.png", "textureMap0");
+        texture = new Texture("res/textures/humanTextures/skin.png", "textureMap0");
         Human human(vao, ebo, texture, spShader);
         human.position = glm::vec3(36.0f, -7.0f, 65.0f);
         human.scale = glm::vec3(0.5f, 0.5f, 0.5f);
 
         //hair
         processMesh(loader.LoadedMeshes[1]);
-        texture = new Texture("res/models/female1/textures/short01_diffuse.png", "textureMap0");
+        texture = new Texture("res/textures/humanTextures/short01_diffuse.png", "textureMap0");
         human.add(vao, ebo, texture, 1);
 
         //eyes
         processMesh(loader.LoadedMeshes[2]);
-        texture = new Texture("res/models/female1/textures/brown_eye.png", "textureMap0");
+        texture = new Texture("res/textures/humanTextures/brown_eye.png", "textureMap0");
         human.add(vao, ebo, texture, 2);
 
         //eyebrows
         processMesh(loader.LoadedMeshes[3]);
-        texture = new Texture("res/models/female1/textures/eyebrow006.png", "textureMap0");
+        texture = new Texture("res/textures/humanTextures/eyebrow006.png", "textureMap0");
         human.add(vao, ebo, texture, 3);
 
         //something close to head
         processMesh(loader.LoadedMeshes[4]);
-        texture = new Texture("res/models/female1/textures/teeth.png", "textureMap0");
+        texture = new Texture("res/textures/humanTextures/teeth.png", "textureMap0");
         human.add(vao, ebo, texture, 4);
 
         //tongue
         processMesh(loader.LoadedMeshes[5]);
-        texture = new Texture("res/models/female1/textures/tongue01_diffuse.png", "textureMap0");
+        texture = new Texture("res/textures/humanTextures/tongue01_diffuse.png", "textureMap0");
         human.add(vao, ebo, texture, 5);
 
         //trousers and tshirt
         processMesh(loader.LoadedMeshes[6]);
-        texture = new Texture("res/models/female1/textures/clothes2.png", "textureMap0");
+        texture = new Texture("res/textures/humanTextures/clothes2.png", "textureMap0");
         human.add(vao, ebo, texture, 6);
 
         //shoes
         processMesh(loader.LoadedMeshes[7]);
-        texture = new Texture("res/models/female1/textures/shoes05_diffuse.png", "textureMap0");
+        texture = new Texture("res/textures/humanTextures/shoes05_diffuse.png", "textureMap0");
         human.add(vao, ebo, texture, 7);
         animation2.push_back(human);
     }

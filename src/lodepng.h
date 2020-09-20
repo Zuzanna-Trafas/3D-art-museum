@@ -1130,7 +1130,7 @@ the colors of the raw image are always RGB or RGBA, no matter what color type
 the PNG file uses. To read and write files, there are simple functions to
 convert the files to/from buffers in memory.
 
-This all makes LodePNG suitable for loading textures in games, demos and small
+This all makes LodePNG suitable for loading humanTextures in games, demos and small
 programs, ... It's less suitable for full fledged image editors, loading PNGs
 over network (it requires all the image data to be available before decoding can
 begin), life-critical systems, ...
