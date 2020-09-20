@@ -10,6 +10,9 @@ Camera::Camera(glm::vec3 Pos, glm::vec3 Front, glm::vec3 Up) {
 }
 
 void Camera::move(glm::vec3 newPos) {
+    // limit human space
+    if (newPos.x < 38.0f && newPos.x > 30.0f && newPos.z < 70.0f && newPos.z > 66.0f) return;
+
     // check if not going beyond walls
     if (newPos.x > 72 || newPos.x < -72) return;
     if (newPos.z > 72 || newPos.z < -72) return;

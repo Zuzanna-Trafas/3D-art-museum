@@ -42,14 +42,15 @@ Camera *camera;
 VAO *vao;
 EB *ebo;
 objl::Loader loader;
-std::vector<Human> humans;
 std::vector<Human> animation;
+std::vector<Human> animation2;
 
 GLuint walls;
 GLuint floors;
 GLuint ceilings;
 GLuint frame;
 Texture *texture;
+Texture* textures[8];
 GLuint paintings[40];
 
 
@@ -163,10 +164,10 @@ void initOpenGLProgram(GLFWwindow* window) {
 
         //skin
         processMesh(loader.LoadedMeshes[0]);
-        texture = new Texture("res/models/female1/textures/female_casualsuit01_normal.png", "textureMap0");
+        texture = new Texture("res/models/female1/textures/skin.png", "textureMap0");
         Human human(vao, ebo, texture, spTextured);
-        human.position = glm::vec3(45.0f, -6.0f, 45.0f);
-        human.scale = glm::vec3(0.7f, 0.7f, 0.7f);
+        human.position = glm::vec3(32.0f, -7.0f, 68.0f);
+        human.scale = glm::vec3(0.62f, 0.62f, 0.62f);
 
         //hair
         processMesh(loader.LoadedMeshes[1]);
@@ -203,6 +204,12 @@ void initOpenGLProgram(GLFWwindow* window) {
         texture = new Texture("res/models/female1/textures/shoes05_diffuse.png", "textureMap0");
         human.add(vao, ebo, texture, 7);
         animation.push_back(human);
+    }
+    animation2 = animation;
+    for (int i = 0; i < 30; i++) {
+        animation2.at(i).scale = glm::vec3(0.42f, 0.42f, 0.42f);
+        animation2.at(i).position = glm::vec3(36.0f, -7.0f, 68.0f);
+        animation2.at(i).texture[6] = new Texture("res/models/female1/textures/clothes2.png", "textureMap0");
     }
 }
 
@@ -445,6 +452,7 @@ void drawScene(GLFWwindow* window, int animationMoment) {
 	decorateWalls();
 
     animation.at(animationMoment % 30).drawHuman(glm::mat4(1.0f));
+    animation2.at(animationMoment % 30).drawHuman(glm::mat4(1.0f));
 
 
     /*
