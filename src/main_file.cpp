@@ -164,7 +164,7 @@ void initOpenGLProgram(GLFWwindow* window) {
         texture = new Texture("res/textures/humanTextures2/middleage_lightskinned_male_diffuse.png", "textureMap0");
         Human human(vao, ebo, texture, spShader);
         human.position = glm::vec3(32.0f, -7.0f, 65.0f);
-        human.scale = glm::vec3(0.62f, 0.62f, 0.62f);
+        human.scale = glm::vec3(0.55f, 0.55f, 0.55f);
 
         //hair
         processMesh(loader.LoadedMeshes[1]);
@@ -226,7 +226,7 @@ void initOpenGLProgram(GLFWwindow* window) {
         texture = new Texture("res/textures/humanTextures/skin.png", "textureMap0");
         Human human(vao, ebo, texture, spShader);
         human.position = glm::vec3(36.0f, -7.0f, 65.0f);
-        human.scale = glm::vec3(0.62f, 0.62f, 0.62f);
+        human.scale = glm::vec3(0.55f, 0.55f, 0.55f);
 
         //hair
         processMesh(loader.LoadedMeshes[1]);
@@ -470,14 +470,14 @@ void decorateWalls() {
     drawPainting(Mp, paintings[27]);
 
     Mp = glm::translate(M, glm::vec3(-15.0f, 0.0f, -30.0f));
-    Mp = glm::scale(Mp, glm::vec3(1.0f, 4.0f, 8.0f));
-    Mp = glm::rotate(Mp, 90.0f*PI/180.0f,glm::vec3(0.0f, 1.0f, 0.0f));
-    drawPainting(Mp, paintings[28]);
-
-    Mp = glm::translate(M, glm::vec3(-15.0f, 0.0f, -60.0f));
     Mp = glm::scale(Mp, glm::vec3(1.0f, 4.45f, 5.12f));
     Mp = glm::rotate(Mp, 90.0f*PI/180.0f,glm::vec3(0.0f, 1.0f, 0.0f));
-    drawPainting(Mp, paintings[35]);
+    drawPainting(Mp, paintings[34]);
+
+    Mp = glm::translate(M, glm::vec3(-15.0f, 0.0f, -60.0f));
+    Mp = glm::scale(Mp, glm::vec3(1.0f, 7.6f, 6.0f));
+    Mp = glm::rotate(Mp, 90.0f*PI/180.0f,glm::vec3(0.0f, 1.0f, 0.0f));
+    drawPainting(Mp, paintings[29]);
 
     Mp = glm::translate(M, glm::vec3(-30.0f, 0.0f, -15.0f));
     Mp = glm::scale(Mp, glm::vec3(7.6f, 6.0f, 1.0f));
