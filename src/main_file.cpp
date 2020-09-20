@@ -36,17 +36,20 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "Human.h"
 #include "../OBJ_Loader.h"
 
+
 float aspectRatio = 1;
 Camera *camera;
 VAO *vao;
 EB *ebo;
 objl::Loader loader;
 std::vector<Human> humans;
+std::vector<Human> animation;
 
 GLuint walls;
 GLuint floors;
 GLuint ceilings;
 GLuint frame;
+Texture *texture;
 GLuint paintings[40];
 
 
@@ -102,15 +105,15 @@ void processMesh(objl::Mesh Mesh) {
 
     vao = new VAO();
     vao->Bind();
-
     VBO *vbo = new VBO(vertices.data(), vertexCount * 8);
-    /*
+
     vao->AddLayout(*vbo, 0, 3, 8, 0);
     vao->AddLayout(*vbo, 1, 3, 8, 3);
     vao->AddLayout(*vbo, 2, 2, 8, 6);
 
     ebo = new EB(Mesh.Indices.data(), Mesh.Indices.size());
-     */
+
+    vbo->Unbind();
 }
 
 //Initialization code procedure
@@ -133,28 +136,74 @@ void initOpenGLProgram(GLFWwindow* window) {
         strcpy(path,"res/textures/painting");
         strcat(path, pchar);
         strcat(path, ".png");
-        printf("%s\n", path);
         paintings[i] = readTexture(path, i+1);
     }
     // initialize the camera in the center of a room
     camera = new Camera(glm::vec3(45.0f, 0.0f,  45.0f),
                         glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, 1.0f,  0.0f));
 
-    //animatedModel = animatedModelLoader.loadEntity("object.dae", "tex.png");
-    //HumanModel humanModelHumanModel("../res/models/woman1.obj");
-    /*
 
-    if (!loader.LoadFile("./res/models/woman1.obj")) {
-        fprintf(stderr, "Cannot read obj file\n");
-        exit(EXIT_FAILURE);
+    for (int i = 0; i < 30; i++) {
+        std::string s = std::to_string(i+1);
+        char const *pchar = s.c_str();
+        if (i < 9) {
+            strcpy(path,"./res/models/female1/woman_00000");
+        } else {
+            strcpy(path,"./res/models/female1/woman_0000");
+        }
+        strcat(path, pchar);
+        strcat(path, ".obj");
+        printf("\n\n Path: %s \n\n", path);
+
+
+        if (!loader.LoadFile(path)) {
+            fprintf(stderr, "Cannot read obj file\n");
+            exit(EXIT_FAILURE);
+        }
+
+        //skin
+        processMesh(loader.LoadedMeshes[0]);
+        texture = new Texture("res/models/female1/textures/female_casualsuit01_normal.png", "textureMap0");
+        Human human(vao, ebo, texture, spTextured);
+        human.position = glm::vec3(45.0f, -6.0f, 45.0f);
+        human.scale = glm::vec3(0.7f, 0.7f, 0.7f);
+
+        //hair
+        processMesh(loader.LoadedMeshes[1]);
+        texture = new Texture("res/models/female1/textures/short01_diffuse.png", "textureMap0");
+        human.add(vao, ebo, texture, 1);
+
+        //eyes
+        processMesh(loader.LoadedMeshes[2]);
+        texture = new Texture("res/models/female1/textures/brown_eye.png", "textureMap0");
+        human.add(vao, ebo, texture, 2);
+
+        //eyebrows
+        processMesh(loader.LoadedMeshes[3]);
+        texture = new Texture("res/models/female1/textures/eyebrow006.png", "textureMap0");
+        human.add(vao, ebo, texture, 3);
+
+        //something close to head
+        processMesh(loader.LoadedMeshes[4]);
+        texture = new Texture("res/models/female1/textures/teeth.png", "textureMap0");
+        human.add(vao, ebo, texture, 4);
+
+        //tongue
+        processMesh(loader.LoadedMeshes[5]);
+        texture = new Texture("res/models/female1/textures/tongue01_diffuse.png", "textureMap0");
+        human.add(vao, ebo, texture, 5);
+
+        //trousers and tshirt
+        processMesh(loader.LoadedMeshes[6]);
+        texture = new Texture("res/models/female1/textures/female_casualsuit01_diffuse.png", "textureMap0");
+        human.add(vao, ebo, texture, 6);
+
+        //shoes
+        processMesh(loader.LoadedMeshes[7]);
+        texture = new Texture("res/models/female1/textures/shoes05_diffuse.png", "textureMap0");
+        human.add(vao, ebo, texture, 7);
+        animation.push_back(human);
     }
-    processMesh(loader.LoadedMeshes[0]);
-
-    Human newHuman(vao, ebo, spTextured);
-    newHuman.position = glm::vec3(45.0f, 0.0f, 45.0f);
-    humans.push_back(newHuman);
-     */
-
 }
 
 //Release resources allocated by the program
@@ -178,7 +227,7 @@ void drawPainting(glm::mat4 M, GLuint tex) {
     Models::cube.drawCube(tex);
 }
 
-void drawWalls() {
+void drawMuseumWalls() {
 
     glm::mat4 M = glm::mat4(1.0f); //Initialize model matrix with abn identity matrix
     M = glm::scale(M,glm::vec3(30.0f,9.0f,30.0f)); // scale the walls size
@@ -380,7 +429,7 @@ void decorateWalls() {
 }
 
 //Drawing procedure
-void drawScene(GLFWwindow* window) {
+void drawScene(GLFWwindow* window, int animationMoment) {
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //Clear color and depth buffers
 
@@ -392,11 +441,12 @@ void drawScene(GLFWwindow* window) {
 	glUniformMatrix4fv(spTextured->u("P"), 1, false, glm::value_ptr(P)); //Copy projection matrix to shader program internal variable
 	glUniformMatrix4fv(spTextured->u("V"), 1, false, glm::value_ptr(V)); //Copy view matrix to shader program internal variable
 
-	drawWalls();
+	drawMuseumWalls();
 	decorateWalls();
-	for (Human human : humans) {
-	    human.drawHuman(glm::mat4(1.0f));
-	}
+
+    animation.at(animationMoment % 30).drawHuman(glm::mat4(1.0f));
+
+
     /*
     glm::mat4 M = glm::translate(glm::mat4(1.0f), glm::vec3(55.0f, 1.8f, 55.0f));
     glUniformMatrix4fv(spTextured->u("M"), 1, false, glm::value_ptr(M));
@@ -439,14 +489,16 @@ int main(void)
 	initOpenGLProgram(window); //Call initialization procedure
 
 	//Main application loop
+	int animationMoment = 0;
 
 	glfwSetTime(0); //clear internal timer
 	while (!glfwWindowShouldClose(window)) //As long as the window shouldnt be closed yet...
-	{		
+	{
+	    animationMoment++;
         camera->processInput(window);
         camera->mouseCallback(window);
 		glfwSetTime(0); //clear internal timer
-		drawScene(window); //Execute drawing procedure
+		drawScene(window, animationMoment); //Execute drawing procedure
 		glfwPollEvents(); //Process callback procedures corresponding to the events that took place up to now
 	}
 	freeOpenGLProgram(window);

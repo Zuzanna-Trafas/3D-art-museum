@@ -5,18 +5,24 @@
 #include "Human.h"
 
 Human::Human() {
-    vao = nullptr;
-    ebo = nullptr;
-    sp = nullptr;
 }
 
-Human::Human(VAO *vao, EB *ebo, ShaderProgram *sp) :  vao(vao), ebo(ebo), sp(sp) {
+Human::Human(VAO *_vao, EB *_ebo, Texture* _texture, ShaderProgram *sp) :  sp(sp) {
+    vao[0] = _vao;
+    ebo[0] = _ebo;
+    texture[0] = _texture;
     position = glm::vec3(0, 0, 0);
     rotation = glm::vec3(0, 0, 0);
     scale = glm::vec3(1, 1, 1);
 }
 
 Human::~Human() {}
+
+void Human::add(VAO* _vao, EB *_ebo, Texture* _texture, int index) {
+    vao[index] = _vao;
+    ebo[index] = _ebo;
+    texture[index] = _texture;
+}
 
 void Human::drawHuman(glm::mat4 M) {
     M = glm::translate(M, position);
@@ -25,18 +31,15 @@ void Human::drawHuman(glm::mat4 M) {
     M = glm::rotate(M, rotation.z, glm::vec3(0, 0, 1));
     M = glm::scale(M, scale);
     glUniformMatrix4fv(sp->u("M"), 1, false, glm::value_ptr(M));
-    vao->Bind();
-    ebo->Bind();
+    for (int i = 0; i < 8; i++) {
+        vao[i]->Bind();
+        ebo[i]->Bind();
 
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, texture);
+        texture[i]->Bind(sp->u(texture[i]->uniform_name), 0, GL_TEXTURE0);
 
-    glEnableVertexAttribArray(4);
-    glUniform1i(4, 0);
-
-    glDrawElements(GL_TRIANGLES, ebo->count, GL_UNSIGNED_INT, nullptr);
-    vao->Unbind();
-    ebo->Unbind();
-
-    glDisableVertexAttribArray(4);
+        glDrawElements(GL_TRIANGLES, ebo[i]->count, GL_UNSIGNED_INT, nullptr);
+        vao[i]->Unbind();
+        ebo[i]->Unbind();
+        texture[i]->Unbind(GL_TEXTURE0);
+    }
 }

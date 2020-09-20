@@ -45,7 +45,7 @@ namespace Models {
         glVertexAttribPointer(2, 4, GL_FLOAT, false, 0, texCoords);
         glVertexAttribPointer(3, 4, GL_FLOAT, false, 0, colors);
 
-        glDrawArrays(GL_TRIANGLES, 0, vertexCount);
+        glDrawElements(GL_TRIANGLES, vertexCount, GL_UNSIGNED_INT, nullptr);
 
         glDisableVertexAttribArray(0);
         glDisableVertexAttribArray(1);
