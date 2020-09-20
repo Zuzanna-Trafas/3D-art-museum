@@ -220,40 +220,40 @@ void decorateWalls() {
     // ROOM 1
 
     glm::mat4 Mp = glm::translate(M, glm::vec3(34.0f, 0.0f, 75.0f));
-    Mp = glm::scale(Mp, glm::vec3(6.0f, 6.0f, 1.0f));
+    Mp = glm::scale(Mp, glm::vec3(7.99f, 5.51f, 1.0f));
     drawPainting(Mp, paintings[0]);
 
     Mp = glm::translate(M, glm::vec3(58.0f, 0.0f, 75.0f));
-    Mp = glm::scale(Mp, glm::vec3(6.0f, 6.0f, 1.0f));
+    Mp = glm::scale(Mp, glm::vec3(6.67f, 7.68f, 1.0f));
     drawPainting(Mp, paintings[1]);
 
     Mp = glm::translate(M, glm::vec3(75.0f, 0.0f, 34.0f));
-    Mp = glm::scale(Mp, glm::vec3(1.0f, 6.0f, 6.0f));
+    Mp = glm::scale(Mp, glm::vec3(1.0f, 5.96f, 4.0f));
     Mp = glm::rotate(Mp, 90.0f*PI/180.0f,glm::vec3(0.0f, 1.0f, 0.0f));
     drawPainting(Mp, paintings[2]);
 
     Mp = glm::translate(M, glm::vec3(75.0f, 0.0f, 58.0f));
-    Mp = glm::scale(Mp, glm::vec3(1.0f, 6.0f, 6.0f));
+    Mp = glm::scale(Mp, glm::vec3(1.0f, 6.0f, 7.58f));
     Mp = glm::rotate(Mp, 90.0f*PI/180.0f,glm::vec3(0.0f, 1.0f, 0.0f));
     drawPainting(Mp, paintings[3]);
 
     Mp = glm::translate(M, glm::vec3(15.0f, 0.0f, 30.0f));
-    Mp = glm::scale(Mp, glm::vec3(1.0f, 6.0f, 6.0f));
+    Mp = glm::scale(Mp, glm::vec3(1.0f, 3.22f, 3.0f));
     Mp = glm::rotate(Mp, -90.0f*PI/180.0f,glm::vec3(0.0f, 1.0f, 0.0f));
     drawPainting(Mp, paintings[4]);
 
     Mp = glm::translate(M, glm::vec3(15.0f, 0.0f, 60.0f));
-    Mp = glm::scale(Mp, glm::vec3(1.0f, 6.0f, 6.0f));
+    Mp = glm::scale(Mp, glm::vec3(1.0f, 6.0f, 4.66f));
     Mp = glm::rotate(Mp, -90.0f*PI/180.0f,glm::vec3(0.0f, 1.0f, 0.0f));
     drawPainting(Mp, paintings[5]);
 
     Mp = glm::translate(M, glm::vec3(30.0f, 0.0f, 15.0f));
-    Mp = glm::scale(Mp, glm::vec3(6.0f, 6.0f, 1.0f));
+    Mp = glm::scale(Mp, glm::vec3(5.21f, 6.46f, 1.0f));
     Mp = glm::rotate(Mp, 180.0f*PI/180.0f,glm::vec3(0.0f, 1.0f, 0.0f));
     drawPainting(Mp, paintings[6]);
 
     Mp = glm::translate(M, glm::vec3(60.0f, 0.0f, 15.0f));
-    Mp = glm::scale(Mp, glm::vec3(6.0f, 6.0f, 1.0f));
+    Mp = glm::scale(Mp, glm::vec3(6.4f, 4.3f, 1.0f));
     Mp = glm::rotate(Mp, 180.0f*PI/180.0f,glm::vec3(0.0f, 1.0f, 0.0f));
     drawPainting(Mp, paintings[7]);
 
@@ -261,40 +261,40 @@ void decorateWalls() {
     // ROOM 2
 
     Mp = glm::translate(M, glm::vec3(-34.0f, 0.0f, 75.0f));
-    Mp = glm::scale(Mp, glm::vec3(6.0f, 6.0f, 1.0f));
+    Mp = glm::scale(Mp, glm::vec3(6.4f, 4.965f, 1.0f));
     drawPainting(Mp, paintings[8]);
 
     Mp = glm::translate(M, glm::vec3(-58.0f, 0.0f, 75.0f));
-    Mp = glm::scale(Mp, glm::vec3(6.0f, 6.0f, 1.0f));
+    Mp = glm::scale(Mp, glm::vec3(7.36f, 5.42f, 1.0f));
     drawPainting(Mp, paintings[9]);
 
     Mp = glm::translate(M, glm::vec3(-75.0f, 0.0f, 34.0f));
-    Mp = glm::scale(Mp, glm::vec3(1.0f, 6.0f, 6.0f));
+    Mp = glm::scale(Mp, glm::vec3(1.0f, 3.015f, 4.8f));
     Mp = glm::rotate(Mp, -90.0f*PI/180.0f,glm::vec3(0.0f, 1.0f, 0.0f));
     drawPainting(Mp, paintings[10]);
 
     Mp = glm::translate(M, glm::vec3(-75.0f, 0.0f, 58.0f));
-    Mp = glm::scale(Mp, glm::vec3(1.0f, 6.0f, 6.0f));
+    Mp = glm::scale(Mp, glm::vec3(1.0f, 4.0f, 4.725f));
     Mp = glm::rotate(Mp, -90.0f*PI/180.0f,glm::vec3(0.0f, 1.0f, 0.0f));
     drawPainting(Mp, paintings[11]);
 
     Mp = glm::translate(M, glm::vec3(-15.0f, 0.0f, 30.0f));
-    Mp = glm::scale(Mp, glm::vec3(1.0f, 6.0f, 6.0f));
+    Mp = glm::scale(Mp, glm::vec3(1.0f, 2.11f, 4.72f));
     Mp = glm::rotate(Mp, 90.0f*PI/180.0f,glm::vec3(0.0f, 1.0f, 0.0f));
     drawPainting(Mp, paintings[12]);
 
     Mp = glm::translate(M, glm::vec3(-15.0f, 0.0f, 60.0f));
-    Mp = glm::scale(Mp, glm::vec3(1.0f, 6.0f, 6.0f));
+    Mp = glm::scale(Mp, glm::vec3(1.0f, 4.965f, 4.0));
     Mp = glm::rotate(Mp, 90.0f*PI/180.0f,glm::vec3(0.0f, 1.0f, 0.0f));
     drawPainting(Mp, paintings[13]);
 
     Mp = glm::translate(M, glm::vec3(-30.0f, 0.0f, 15.0f));
-    Mp = glm::scale(Mp, glm::vec3(6.0f, 6.0f, 1.0f));
+    Mp = glm::scale(Mp, glm::vec3(6.4f, 3.2f, 1.0f));
     Mp = glm::rotate(Mp, 180.0f*PI/180.0f,glm::vec3(0.0f, 1.0f, 0.0f));
     drawPainting(Mp, paintings[14]);
 
     Mp = glm::translate(M, glm::vec3(-60.0f, 0.0f, 15.0f));
-    Mp = glm::scale(Mp, glm::vec3(6.0f, 6.0f, 1.0f));
+    Mp = glm::scale(Mp, glm::vec3(6.4f, 2.9f, 1.0f));
     Mp = glm::rotate(Mp, 180.0f*PI/180.0f,glm::vec3(0.0f, 1.0f, 0.0f));
     drawPainting(Mp, paintings[15]);
 
