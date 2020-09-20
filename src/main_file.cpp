@@ -148,9 +148,9 @@ void initOpenGLProgram(GLFWwindow* window) {
         std::string s = std::to_string(i+1);
         char const *pchar = s.c_str();
         if (i < 9) {
-            strcpy(path,"./res/models/female1/woman_00000");
+            strcpy(path,"./res/models/animation2/woman_00000");
         } else {
-            strcpy(path,"./res/models/female1/woman_0000");
+            strcpy(path,"./res/models/animation2/woman_0000");
         }
         strcat(path, pchar);
         strcat(path, ".obj");
@@ -205,11 +205,67 @@ void initOpenGLProgram(GLFWwindow* window) {
         human.add(vao, ebo, texture, 7);
         animation.push_back(human);
     }
-    animation2 = animation;
+
     for (int i = 0; i < 30; i++) {
-        animation2.at(i).scale = glm::vec3(0.42f, 0.42f, 0.42f);
-        animation2.at(i).position = glm::vec3(36.0f, -7.0f, 68.0f);
-        animation2.at(i).texture[6] = new Texture("res/models/female1/textures/clothes2.png", "textureMap0");
+        std::string s = std::to_string(i+1);
+        char const *pchar = s.c_str();
+        if (i < 9) {
+            strcpy(path,"./res/models/animation2/woman_00000");
+        } else {
+            strcpy(path,"./res/models/animation2/woman_0000");
+        }
+        strcat(path, pchar);
+        strcat(path, ".obj");
+        printf("\n\n Path: %s \n\n", path);
+
+
+        if (!loader.LoadFile(path)) {
+            fprintf(stderr, "Cannot read obj file\n");
+            exit(EXIT_FAILURE);
+        }
+
+        //skin
+        processMesh(loader.LoadedMeshes[0]);
+        texture = new Texture("res/models/female1/textures/skin.png", "textureMap0");
+        Human human(vao, ebo, texture, spTextured);
+        human.position = glm::vec3(36.0f, -7.0f, 68.0f);
+        human.scale = glm::vec3(0.5f, 0.5f, 0.5f);
+
+        //hair
+        processMesh(loader.LoadedMeshes[1]);
+        texture = new Texture("res/models/female1/textures/short01_diffuse.png", "textureMap0");
+        human.add(vao, ebo, texture, 1);
+
+        //eyes
+        processMesh(loader.LoadedMeshes[2]);
+        texture = new Texture("res/models/female1/textures/brown_eye.png", "textureMap0");
+        human.add(vao, ebo, texture, 2);
+
+        //eyebrows
+        processMesh(loader.LoadedMeshes[3]);
+        texture = new Texture("res/models/female1/textures/eyebrow006.png", "textureMap0");
+        human.add(vao, ebo, texture, 3);
+
+        //something close to head
+        processMesh(loader.LoadedMeshes[4]);
+        texture = new Texture("res/models/female1/textures/teeth.png", "textureMap0");
+        human.add(vao, ebo, texture, 4);
+
+        //tongue
+        processMesh(loader.LoadedMeshes[5]);
+        texture = new Texture("res/models/female1/textures/tongue01_diffuse.png", "textureMap0");
+        human.add(vao, ebo, texture, 5);
+
+        //trousers and tshirt
+        processMesh(loader.LoadedMeshes[6]);
+        texture = new Texture("res/models/female1/textures/clothes2.png", "textureMap0");
+        human.add(vao, ebo, texture, 6);
+
+        //shoes
+        processMesh(loader.LoadedMeshes[7]);
+        texture = new Texture("res/models/female1/textures/shoes05_diffuse.png", "textureMap0");
+        human.add(vao, ebo, texture, 7);
+        animation2.push_back(human);
     }
 }
 
@@ -276,40 +332,40 @@ void decorateWalls() {
     // ROOM 1
 
     glm::mat4 Mp = glm::translate(M, glm::vec3(34.0f, 0.0f, 75.0f));
-    Mp = glm::scale(Mp, glm::vec3(6.0f, 6.0f, 1.0f));
+    Mp = glm::scale(Mp, glm::vec3(7.99f, 5.51f, 1.0f));
     drawPainting(Mp, paintings[0]);
 
     Mp = glm::translate(M, glm::vec3(58.0f, 0.0f, 75.0f));
-    Mp = glm::scale(Mp, glm::vec3(6.0f, 6.0f, 1.0f));
+    Mp = glm::scale(Mp, glm::vec3(6.67f, 7.68f, 1.0f));
     drawPainting(Mp, paintings[1]);
 
     Mp = glm::translate(M, glm::vec3(75.0f, 0.0f, 34.0f));
-    Mp = glm::scale(Mp, glm::vec3(1.0f, 6.0f, 6.0f));
+    Mp = glm::scale(Mp, glm::vec3(1.0f, 5.96f, 4.0f));
     Mp = glm::rotate(Mp, 90.0f*PI/180.0f,glm::vec3(0.0f, 1.0f, 0.0f));
     drawPainting(Mp, paintings[2]);
 
     Mp = glm::translate(M, glm::vec3(75.0f, 0.0f, 58.0f));
-    Mp = glm::scale(Mp, glm::vec3(1.0f, 6.0f, 6.0f));
+    Mp = glm::scale(Mp, glm::vec3(1.0f, 6.0f, 7.58f));
     Mp = glm::rotate(Mp, 90.0f*PI/180.0f,glm::vec3(0.0f, 1.0f, 0.0f));
     drawPainting(Mp, paintings[3]);
 
     Mp = glm::translate(M, glm::vec3(15.0f, 0.0f, 30.0f));
-    Mp = glm::scale(Mp, glm::vec3(1.0f, 6.0f, 6.0f));
+    Mp = glm::scale(Mp, glm::vec3(1.0f, 3.22f, 3.0f));
     Mp = glm::rotate(Mp, -90.0f*PI/180.0f,glm::vec3(0.0f, 1.0f, 0.0f));
     drawPainting(Mp, paintings[4]);
 
     Mp = glm::translate(M, glm::vec3(15.0f, 0.0f, 60.0f));
-    Mp = glm::scale(Mp, glm::vec3(1.0f, 6.0f, 6.0f));
+    Mp = glm::scale(Mp, glm::vec3(1.0f, 6.0f, 4.66f));
     Mp = glm::rotate(Mp, -90.0f*PI/180.0f,glm::vec3(0.0f, 1.0f, 0.0f));
     drawPainting(Mp, paintings[5]);
 
     Mp = glm::translate(M, glm::vec3(30.0f, 0.0f, 15.0f));
-    Mp = glm::scale(Mp, glm::vec3(6.0f, 6.0f, 1.0f));
+    Mp = glm::scale(Mp, glm::vec3(5.21f, 6.46f, 1.0f));
     Mp = glm::rotate(Mp, 180.0f*PI/180.0f,glm::vec3(0.0f, 1.0f, 0.0f));
     drawPainting(Mp, paintings[6]);
 
     Mp = glm::translate(M, glm::vec3(60.0f, 0.0f, 15.0f));
-    Mp = glm::scale(Mp, glm::vec3(6.0f, 6.0f, 1.0f));
+    Mp = glm::scale(Mp, glm::vec3(6.4f, 4.3f, 1.0f));
     Mp = glm::rotate(Mp, 180.0f*PI/180.0f,glm::vec3(0.0f, 1.0f, 0.0f));
     drawPainting(Mp, paintings[7]);
 
@@ -317,40 +373,40 @@ void decorateWalls() {
     // ROOM 2
 
     Mp = glm::translate(M, glm::vec3(-34.0f, 0.0f, 75.0f));
-    Mp = glm::scale(Mp, glm::vec3(6.0f, 6.0f, 1.0f));
+    Mp = glm::scale(Mp, glm::vec3(6.4f, 4.965f, 1.0f));
     drawPainting(Mp, paintings[8]);
 
     Mp = glm::translate(M, glm::vec3(-58.0f, 0.0f, 75.0f));
-    Mp = glm::scale(Mp, glm::vec3(6.0f, 6.0f, 1.0f));
+    Mp = glm::scale(Mp, glm::vec3(7.36f, 5.42f, 1.0f));
     drawPainting(Mp, paintings[9]);
 
     Mp = glm::translate(M, glm::vec3(-75.0f, 0.0f, 34.0f));
-    Mp = glm::scale(Mp, glm::vec3(1.0f, 6.0f, 6.0f));
+    Mp = glm::scale(Mp, glm::vec3(1.0f, 3.015f, 4.8f));
     Mp = glm::rotate(Mp, -90.0f*PI/180.0f,glm::vec3(0.0f, 1.0f, 0.0f));
     drawPainting(Mp, paintings[10]);
 
     Mp = glm::translate(M, glm::vec3(-75.0f, 0.0f, 58.0f));
-    Mp = glm::scale(Mp, glm::vec3(1.0f, 6.0f, 6.0f));
+    Mp = glm::scale(Mp, glm::vec3(1.0f, 4.0f, 4.725f));
     Mp = glm::rotate(Mp, -90.0f*PI/180.0f,glm::vec3(0.0f, 1.0f, 0.0f));
     drawPainting(Mp, paintings[11]);
 
     Mp = glm::translate(M, glm::vec3(-15.0f, 0.0f, 30.0f));
-    Mp = glm::scale(Mp, glm::vec3(1.0f, 6.0f, 6.0f));
+    Mp = glm::scale(Mp, glm::vec3(1.0f, 2.11f, 4.72f));
     Mp = glm::rotate(Mp, 90.0f*PI/180.0f,glm::vec3(0.0f, 1.0f, 0.0f));
     drawPainting(Mp, paintings[12]);
 
     Mp = glm::translate(M, glm::vec3(-15.0f, 0.0f, 60.0f));
-    Mp = glm::scale(Mp, glm::vec3(1.0f, 6.0f, 6.0f));
+    Mp = glm::scale(Mp, glm::vec3(1.0f, 4.965f, 4.0));
     Mp = glm::rotate(Mp, 90.0f*PI/180.0f,glm::vec3(0.0f, 1.0f, 0.0f));
     drawPainting(Mp, paintings[13]);
 
     Mp = glm::translate(M, glm::vec3(-30.0f, 0.0f, 15.0f));
-    Mp = glm::scale(Mp, glm::vec3(6.0f, 6.0f, 1.0f));
+    Mp = glm::scale(Mp, glm::vec3(6.4f, 3.2f, 1.0f));
     Mp = glm::rotate(Mp, 180.0f*PI/180.0f,glm::vec3(0.0f, 1.0f, 0.0f));
     drawPainting(Mp, paintings[14]);
 
     Mp = glm::translate(M, glm::vec3(-60.0f, 0.0f, 15.0f));
-    Mp = glm::scale(Mp, glm::vec3(6.0f, 6.0f, 1.0f));
+    Mp = glm::scale(Mp, glm::vec3(6.4f, 2.9f, 1.0f));
     Mp = glm::rotate(Mp, 180.0f*PI/180.0f,glm::vec3(0.0f, 1.0f, 0.0f));
     drawPainting(Mp, paintings[15]);
 
@@ -451,17 +507,17 @@ void drawScene(GLFWwindow* window, int animationMoment) {
 	drawMuseumWalls();
 	decorateWalls();
 
-    animation.at(animationMoment % 30).drawHuman(glm::mat4(1.0f));
-    animation2.at(animationMoment % 30).drawHuman(glm::mat4(1.0f));
+	animationMoment1 = 0;
+	if (animationMoment <= 15) {
+        animationMoment1 = animationMoment;
+    } else if (animationMoment > 15 && animationMoment < 75) {
+	    animationMoment1 = 15;
+	} else if (animationMoment >= 75 && animationMoment < 90) {
+	    animationMoment1 = animationMoment % 30;
+	}
 
-
-    /*
-    glm::mat4 M = glm::translate(glm::mat4(1.0f), glm::vec3(55.0f, 1.8f, 55.0f));
-    glUniformMatrix4fv(spTextured->u("M"), 1, false, glm::value_ptr(M));
-
-    AnimatedModelRenderer animatedModelRenderer;
-    animatedModelRenderer.render(animatedModel);
-     */
+    animation.at(animationMoment1).drawHuman(glm::mat4(1.0f));
+    animation2.at(animationMoment2).drawHuman(glm::mat4(1.0f));
 
     glfwSwapBuffers(window); //Copy back buffer to the front buffer
 }
@@ -503,6 +559,9 @@ int main(void)
 	while (!glfwWindowShouldClose(window)) //As long as the window shouldnt be closed yet...
 	{
 	    animationMoment++;
+	    if(animationMoment > 180) {
+	        animationMoment = 0;
+	    }
         camera->processInput(window);
         camera->mouseCallback(window);
 		glfwSetTime(0); //clear internal timer
